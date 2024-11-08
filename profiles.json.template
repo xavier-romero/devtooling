@@ -1,0 +1,8 @@
+{
+    "profiles": {
+        "default": {
+            "node_url": "$L2_RPC_URL",
+            "funded_key": "$L2_PRV_KEY"
+        }
+    }
+}
