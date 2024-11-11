@@ -7,7 +7,7 @@ RUN cd polygon-cli && make build
 # ETH TOOLS
 FROM golang:1.23 as ethtools
 WORKDIR /tmp
-RUN echo "Bump git"
+RUN echo "Bump git 4"
 RUN git clone https://github.com/xavier-romero/eth-bench.git
 
 # FOUNDRY BUILDER
