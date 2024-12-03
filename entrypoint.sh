@@ -7,6 +7,7 @@ ETHTOOLS_PROFILES_TEMPLATE=/tools/profiles.json.template
 
 # WILDCARD_COMMAND is a wrapper that will set all variables before executing passed command
 echo "#!/bin/bash" > $WILDCARD_COMMAND
+echo 'export PATH=$PATH:/tools:/scripts' >> $WILDCARD_COMMAND
 chmod +x $WILDCARD_COMMAND
 
 # Function to export and save env variables

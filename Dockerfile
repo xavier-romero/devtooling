@@ -31,9 +31,11 @@ RUN apt-get update \
 # Polygon CLI
 COPY --from=polycli /tmp/polygon-cli/out/polycli /usr/local/bin/polycli
 # polycli retest output
-ADD files/polycli-retest-20241203.json /tools/polycli-retest.json
+ADD files/polycli-retest-20241203.json /files/polycli-retest.json
 # Foundry
 COPY --from=foundry /usr/local/bin/* /usr/local/bin/
+# go-ethereum fuzzed
+ADD files/FuzzEVMRunner /files/FuzzEVMRunner
 
 ## Eth Bench Tools
 # requirements
@@ -46,7 +48,7 @@ COPY --from=ethtools /tmp/eth-bench/geth.py /tools/
 COPY --from=ethtools /tmp/eth-bench/sc.py /tools/
 COPY --from=ethtools /tmp/eth-bench/wallets.py /tools/
 COPY --from=ethtools /tmp/eth-bench/bridge.py /tools/
-COPY --from=ethtools /tmp/eth-bench/scripted /scripted
+COPY --from=ethtools /tmp/eth-bench/scripted /files/scripted
 COPY --from=ethtools /tmp/eth-bench/contracts /tools/contracts
 # tools
 COPY --from=ethtools /tmp/eth-bench/bench.py /tools/bench
@@ -55,8 +57,12 @@ COPY --from=ethtools /tmp/eth-bench/tool_scripted.py /tools/scripted
 
 COPY profiles.json.template /tools/profiles.json.template
 
-RUN echo 'PATH=$PATH:/tools' >> /root/.bashrc
-ENV PATH="$PATH:/tools"
+# scripts
+COPY --chmod=755 scripts/run-fuzzed.sh /scripts/run-fuzzed
+COPY --chmod=755 scripts/run-zktv.sh /scripts/run-zktv
+
+RUN echo 'PATH=$PATH:/tools:/scripts' >> /root/.bashrc
+# ENV PATH="$PATH:/tools:/scripts"
 
 ADD entrypoint.sh /entrypoint.sh
 WORKDIR /tools
