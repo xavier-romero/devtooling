@@ -38,7 +38,7 @@
   ansible.builtin.shell: |
     tdir=$(mktemp -d -p {{ work_dir }})
     pushd $tdir || exit 1
-    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 6004600C60003960046000F35F35FF00 | tee selfdestroy.json &>> {{ log_file }}
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --create 6004600C60003960046000F35F35FF00 | tee selfdestroy.json &>> {{ log_file }}
     echo "Code before self destruct: " &>> {{ log_file }}
     cast code --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
     echo "Balance before self destruct: " &>> {{ log_file }}
@@ -58,7 +58,7 @@
   ansible.builtin.shell: |
     tdir=$(mktemp -d -p {{ work_dir }})
     pushd $tdir || exit 1
-    cast send {{ legacy_flag }} --private-key {{ private_key }} --value 43gwei --rpc-url {{ rpc_url }} -j --create 6004600C60003960046000F35F35FF00 | tee selfdestroy.json &>> {{ log_file }}
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --value 43gwei --rpc-url {{ rpc_url }} --json --create 6004600C60003960046000F35F35FF00 | tee selfdestroy.json &>> {{ log_file }}
     echo "Code before self destruct: " &>> {{ log_file }}
     cast code --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
     echo "Balance before self destruct: " &>> {{ log_file }}
@@ -79,8 +79,8 @@
   ansible.builtin.shell: |
     tdir=$(mktemp -d -p {{ work_dir }})
     pushd $tdir || exit 1
-    cast send {{ legacy_flag }} --private-key {{ private_key }} --value 47gwei --rpc-url {{ rpc_url }} -j --create 6003600C60003960036000F35F5FFD | tee reverter.json &>> {{ log_file }}
-    cast send {{ legacy_flag }} --private-key {{ private_key }} --value 47gwei --rpc-url {{ rpc_url }} -j --create 6004600C60003960046000F35F35FF00 | tee selfdestroy.json &>> {{ log_file }}
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --value 47gwei --rpc-url {{ rpc_url }} --json --create 6003600C60003960036000F35F5FFD | tee reverter.json &>> {{ log_file }}
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --value 47gwei --rpc-url {{ rpc_url }} --json --create 6004600C60003960046000F35F35FF00 | tee selfdestroy.json &>> {{ log_file }}
     echo "Code before self destruct: " &>> {{ log_file }}
     cast code --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
     echo "Balance before self destruct: " &>> {{ log_file }}

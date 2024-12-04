@@ -22,7 +22,7 @@
 - name: Erigon OMM for Large Call
   ansible.builtin.shell: |
     cast call --rpc-url {{ rpc_url }} --create 6000600052650fffffffffff60006000f060005500 >> {{ log_file }}
-    cast send {{ legacy_flag }} --gas-limit 29999999 --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 0x6000600052650fffffffffff60006000f060005500 >> {{ log_file }}
+    cast send {{ legacy_flag }} --gas-limit 29999999 --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --create 0x6000600052650fffffffffff60006000f060005500 >> {{ log_file }}
     cast block-number --rpc-url {{ rpc_url }}
   args:
     executable: /bin/bash
@@ -38,7 +38,7 @@
 - name: Erigon Large Return
   ansible.builtin.shell: |
     cast rpc --rpc-url {{ rpc_url }} debug_traceCall '{"input": "0x60016000036000f300"}' latest >> {{ log_file }}
-    cast send {{ legacy_flag }} --gas-limit 29999999 --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 0x60016000036000f300 >> {{ log_file }}
+    cast send {{ legacy_flag }} --gas-limit 29999999 --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --create 0x60016000036000f300 >> {{ log_file }}
   args:
     executable: /bin/bash
 
@@ -137,7 +137,7 @@
 # this contract is manually written since it's not really possible to compile something like this
 - name: Executable PUSH operand
   ansible.builtin.shell: |
-    cast send {{ legacy_flag }} --gas-limit 100000 --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 6b5b600160015B81019060065650600156 >> {{ log_file }}
+    cast send {{ legacy_flag }} --gas-limit 100000 --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --create 6b5b600160015B81019060065650600156 >> {{ log_file }}
   args:
     executable: /bin/bash
 
@@ -151,7 +151,7 @@
 # echo '{ (CODECOPY 0 0 (CODESIZE)) (CREATE 0 0 (CODESIZE)) }' | lllc
 - name: Recursive creation forever
   ansible.builtin.shell: |
-    cast send {{ legacy_flag }} --gas-limit 29999999 --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 3860006000393860006000f000 >> {{ log_file }}
+    cast send {{ legacy_flag }} --gas-limit 29999999 --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --create 3860006000393860006000f000 >> {{ log_file }}
   args:
     executable: /bin/bash
 
@@ -186,6 +186,7 @@
   vars:
     inscription_message: Trigger empty batches
 
+# TODO something very wrong happens when I run this call. It seems like it always gets stuck
 - name: Erigon IDENTITY precompile not computing counters
   ansible.builtin.shell: |
     # specify your RPC

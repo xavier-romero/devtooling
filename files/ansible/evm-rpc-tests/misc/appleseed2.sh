@@ -12,9 +12,12 @@
 
 trap 'echo "trapped - exiting"; exit' SIGINT
 
-rpc_url="$(kurtosis port print cdk-v1-2 cdk-erigon-node-001 http-rpc)"
-# 0xbA0000dF6d222487D03E962EAe30863F5228f39B
-seed_mnemonic="ghost fuel master kind winner ordinary fuel because idle bracket kidney daring"
+# rpc_url="$(kurtosis port print cdk el-1-geth-lighthouse rpc)"
+rpc_url="https://rpc.cdk10.dev.polygon"
+# rpc_url="https://rpc.internal.zkevm-rpc.com"
+
+# 0x696A596754B410Fa552da5d9Cf1dd51aA05bA4cA
+seed_mnemonic="nest seek pledge patrol project purchase rebuild garlic slush core define lunar"
 leave_behind=271828
 
 function distribute() {
@@ -45,6 +48,24 @@ function distribute() {
 
     # cast send --gas-price 5gwei --legacy --gas-limit 1341963 --rpc-url $rpc_url  --value 100 --mnemonic "$seed_mnemonic" --mnemonic-index "$mnemonic_index" 0xfBE07a394847c26b1d998B6e44EE78A9C8191f13 0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000Cb31D71c184a83831670dc46AEa45b5eBEa281A9000000000000000000000000000000000000000000000000000000000000000F0000000000000000000000000000000000000000000000000000000000000003
 
+    lxly_bridge_addr="0x1348947e282138d8f377b467F7D9c2EB0F335d1f"
+
+    dest_net=1
+    if [[ $(($RANDOM % 2)) -eq 0 ]]; then
+        dest_net=0
+    fi
+
+    bridge_sig="bridgeAsset(uint32,address,uint256,address,bool,bytes)"
+    cast send \
+        --legacy \
+        --rpc-url "$rpc_url" \
+        --value 101 \
+        --gas-limit 200000 \
+        --mnemonic "$seed_mnemonic" --mnemonic-index "$mnemonic_index" \
+        "$lxly_bridge_addr" \
+        "$bridge_sig" \
+        $dest_net "0x3FC8B95a39dA7c519b2cB96D63c42ba262D877Cb" 101 "$(cast az)" "true" "0x"
+
     # finished
     # finished
     # finished
@@ -52,8 +73,8 @@ function distribute() {
     balance=$(cast balance --rpc-url $rpc_url $eth_address)
 
     local gas_price="$(cast gas-price --rpc-url $rpc_url)"
-    # gas_price=$((gas_price * 3 / 2)) # push the gas price up for faster mining
-    gas_price=$((gas_price * 11 / 10)) # push the gas price up for faster mining
+    gas_price=$(bc <<< "$gas_price * 3 / 2") # push the gas price up for faster mining
+
 
     local dist_value=$(bc <<< "($balance - $leave_behind - (2 * 21000 * $gas_price)) / 2")
     local has_enough=$(bc <<< "$dist_value > (1000000000*21000)") # let's assume we want at least enough for a tx at 1gwei
@@ -63,6 +84,7 @@ function distribute() {
     fi
 
     echo "sending $dist_value from $eth_address:$mnemonic_index to $eth_address_1:$mnemonic_index_1 and $eth_address_2:$mnemonic_index_2"
+    echo "current balance: $balance"
 
     cast send --timeout 900 --legacy --mnemonic "$seed_mnemonic" --mnemonic-index "$mnemonic_index" --rpc-url "$rpc_url" --gas-price $gas_price --value $dist_value $eth_address_1 > /dev/null
     cast send --timeout 900 --legacy --mnemonic "$seed_mnemonic" --mnemonic-index "$mnemonic_index" --rpc-url "$rpc_url" --gas-price $gas_price --value $dist_value $eth_address_2 > /dev/null

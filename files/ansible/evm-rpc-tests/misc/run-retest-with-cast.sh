@@ -6,7 +6,8 @@
 
 # m/44'/60'/0'/0/5
 private_key="0x9b51fb87ec3b44c2207314b28a6757844d9093337c76aeac8099651d2d52a220"
-rpc_url="$(kurtosis port print cdk cdk-erigon-sequencer-001 rpc)"
+# rpc_url="$(kurtosis port print cdk cdk-erigon-sequencer-001 rpc)"
+rpc_url=https://rpc.internal.zkevm-rpc.com
 eth_address=$(cast wallet address --private-key $private_key)
 tester_addr=0xfBE07a394847c26b1d998B6e44EE78A9C8191f13
 test_actions="0001 0002 0003 0004 0011 0012 0013 0014 0021 0022 0023 0024 0031 0032 0033 0034 0041 0042 0043 0044 0101 0201 0301 0401 0501 0601 0701 0801 0901 1011 1012 1013 1014 2011 2012 2013 2014"
@@ -201,7 +202,7 @@ function fill_nonce_holes() {
         current_block_number=$(cast block-number --rpc-url $rpc_url)
         if [[ $last_block_number -ne $current_block_number ]]; then
             last_block_number=$current_block_number
-            tx_count=$(cast block --rpc-url $rpc_url -j | jq '.transactions | length')
+            tx_count=$(cast block --rpc-url $rpc_url --json | jq '.transactions | length')
             if [[ $tx_count == "0" ]]; then
                 peeked_nonce=$(<$nonce_tmp_file)
                 current_nonce=$(cast nonce --rpc-url $rpc_url "$wallet_address")

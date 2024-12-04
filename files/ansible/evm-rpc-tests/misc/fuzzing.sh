@@ -152,13 +152,13 @@ find . -type d -name 'batch-*' | while read -r batch_folder; do
         cast rpc --rpc-url $rpc_url zkevm_getBatchByNumber $batch_hex_number > $batch_folder/batch-$batch_hex_number.json
     fi
     if [[ ! -e $batch_folder/blocks.ndjson ]]; then
-        cat $batch_folder/batch-$batch_hex_number.json | jq -r '.blocks[]' | xargs -I xxx cast block -j --rpc-url $rpc_url xxx > $batch_folder/blocks.ndjson
+        cat $batch_folder/batch-$batch_hex_number.json | jq -r '.blocks[]' | xargs -I xxx cast block --json --rpc-url $rpc_url xxx > $batch_folder/blocks.ndjson
     fi
     if [[ ! -e $batch_folder/txs.ndjson ]]; then
-        cat $batch_folder/batch-$batch_hex_number.json | jq -r '.transactions[]' | xargs -I xxx cast tx -j --rpc-url $rpc_url xxx > $batch_folder/txs.ndjson
+        cat $batch_folder/batch-$batch_hex_number.json | jq -r '.transactions[]' | xargs -I xxx cast tx --json --rpc-url $rpc_url xxx > $batch_folder/txs.ndjson
     fi
     if [[ ! -e $batch_folder/receipts.ndjson ]]; then
-        cat $batch_folder/batch-$batch_hex_number.json | jq -r '.transactions[]' | xargs -I xxx cast tx -j --rpc-url $rpc_url xxx > $batch_folder/receipts.ndjson
+        cat $batch_folder/batch-$batch_hex_number.json | jq -r '.transactions[]' | xargs -I xxx cast tx --json --rpc-url $rpc_url xxx > $batch_folder/receipts.ndjson
     fi
     if [[ ! -e $batch_folder/traces.ndjson ]]; then
         cat $batch_folder/batch-$batch_hex_number.json | jq -r '.transactions[]' | xargs -I xxx cast rpc --rpc-url $rpc_url zkevm_traceTransactionCounters xxx > $batch_folder/traces.ndjson

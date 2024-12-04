@@ -7,7 +7,7 @@ RUN cd polygon-cli && make build
 # ETH TOOLS
 FROM golang:1.23 as ethtools
 WORKDIR /tmp
-RUN echo "Bump git 0"
+RUN echo "Bump git 1"
 RUN git clone https://github.com/xavier-romero/eth-bench.git
 
 # FOUNDRY BUILDER
@@ -17,11 +17,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y curl git
 RUN curl -L https://foundry.paradigm.xyz | bash
 RUN /root/.foundry/bin/foundryup
 RUN cp /root/.foundry/bin/* /usr/local/bin/
-
-# JHILLIARD REPO
-FROM golang:1.23 as jhilliard
-WORKDIR /tmp
-RUN git clone https://github.com/0xPolygon/jhilliard
 
 
 # FINAL

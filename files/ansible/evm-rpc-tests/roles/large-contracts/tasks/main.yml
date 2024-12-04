@@ -4,7 +4,7 @@
 - name: Create a variable sized contracts and call them
   ansible.builtin.shell: |
     cast send \
-        -j {{ legacy_flag }} \
+        --json {{ legacy_flag }} \
         --private-key {{ private_key }} \
         --rpc-url {{ rpc_url }} \
         --create "600061{{ item.hex_size }}60005B7F5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B81526020018082116300000007575B6000F3" > {{ work_dir }}/large-contract-create.{{ item.size }}.json

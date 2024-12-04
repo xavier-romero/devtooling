@@ -46,7 +46,8 @@ This is the list of available/tested commands that can be run either by exec on 
 - ```x polycli monitor```: Any polycli command starting by ```x polycli ...```
 - ```x run-fuzzed```: Run fuzzed contract deploy from [John's go-ethereum repo](https://github.com/praetoriansentry/go-ethereum/tree/master/cmd/evm/testdata/fuzz/FuzzEVMRunner)
 - ```x run-zktv```: Run [zkEVM test-vectors](https://github.com/0xPolygonHermez/zkevm-testvectors/tree/main/tools-inputs/data/calldata) through the [scripted translation](https://github.com/xavier-romero/eth-bench/tree/main/scripted/zktv)
-<!-- - ```x scripted -f modexp.json``` -->
+- ```ansible-playbook /ansible/evm-rpc-tests/site.yml```: Runs ansible playbook, in this example a preconfigured playbook taken from [JHilliard's repo](https://github.com/0xPolygon/jhilliard)
+- ```x scripted -f /files/scripted/boundaries.json```: Run specific tests through the scripted tool, see [available tests here](https://github.com/xavier-romero/eth-bench/tree/main/scripted)
 <!-- - ```x bench -c 10 -t 10 --confirmed``` -->
 
 

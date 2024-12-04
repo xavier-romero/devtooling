@@ -11,7 +11,7 @@
     tdir=$(mktemp -d -p {{ work_dir }})
     pushd $tdir || exit 1
     echo "{{ item }}" &>> {{ log_file }}
-    cast send --timeout {{ cast_timeout }} {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat ../{{ item }}) 2>&1 | tee {{ item }}.deployment &>> {{ log_file }}
+    cast send --timeout {{ cast_timeout }} {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --create $(cat ../{{ item }}) 2>&1 | tee {{ item }}.deployment &>> {{ log_file }}
     ret_code=$?
     if [[ $ret_code -ne 0 ]]; then
         echo "the contract {{ item }} failed to deploy due to a {{ cast_timeout }}s timeout" >> {{ log_file }}
@@ -19,8 +19,8 @@
     fi
 
     for gas_limit in 200000 {{ max_block_size }}; do
-        echo "cast send --timeout {{ cast_timeout }} --gas-limit $gas_limit {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j $(jq -r '.contractAddress' {{ item }}.deployment)" >> {{ log_file }}
-        cast send --timeout {{ cast_timeout }} --gas-limit $gas_limit {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j $(jq -r '.contractAddress' {{ item }}.deployment) 2>&1 | tee -a {{ item }}.exec &>> {{ log_file }}
+        echo "cast send --timeout {{ cast_timeout }} --gas-limit $gas_limit {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json $(jq -r '.contractAddress' {{ item }}.deployment)" >> {{ log_file }}
+        cast send --timeout {{ cast_timeout }} --gas-limit $gas_limit {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json $(jq -r '.contractAddress' {{ item }}.deployment) 2>&1 | tee -a {{ item }}.exec &>> {{ log_file }}
 
         ret_code=$?
         if [[ $ret_code -ne 0 ]]; then

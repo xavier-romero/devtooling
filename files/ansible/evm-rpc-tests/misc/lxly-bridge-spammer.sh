@@ -12,9 +12,10 @@
 # KURTOSIS
 l1_rpc_url="$(kurtosis port print cdk el-1-geth-lighthouse rpc)"
 l1_send_flags=""
-l2_rpc_url="$(kurtosis port print cdk cdk-erigon-node-001 rpc)"
+l2_rpc_url="$(kurtosis port print cdk cdk-erigon-rpc-001 rpc)"
 l2_send_flags=" --legacy "
-lxly_bridge_addr="0xD71f8F956AD979Cc2988381B8A743a2fE280537D"
+lxly_bridge_addr="0x9d6944138d94bf23a3A7a01C384ba7679Bd74798"
+# lxly_bridge_addr="0xD71f8F956AD979Cc2988381B8A743a2fE280537D"
 private_key="0x3869bfbc61895584db60067dac776d14f2eedc27495a38c860acc9a754cdaf32"
 eth_address="$(cast wallet address --private-key $private_key)"
 

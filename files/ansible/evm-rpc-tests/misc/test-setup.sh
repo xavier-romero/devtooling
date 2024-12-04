@@ -7,11 +7,11 @@ private_key="0x12d7de8621a77640c9241b2595ba78ce443d05e94090365ab3bb5e19df82c625"
 
 # Standard Kurtosis L1
 # rpc_url="$(kurtosis port print cdk el-1-geth-lighthouse rpc)"
-# private_key="0x42b6e34dc21598a807dc19d7784c71b2a7a01f6480dc6f58258f78e539f1a1fa"
+# private_key="0x12d7de8621a77640c9241b2595ba78ce443d05e94090365ab3bb5e19df82c625"
 
 # Bali
 # rpc_url="https://rpc.internal.zkevm-rpc.com"
-# private_key="0x2f6b637f0187825a7a2c82eda968e79e5ea0de889c52b881ab219f81e6937b27"
+# private_key="0xe95de6420d4d089f50bbb2f06fb3f4899bb1aa9f3f94b853edfe5dab994911bb"
 
 # Cardona
 # rpc_url="https://rpc.cardona.zkevm-rpc.com"
@@ -25,25 +25,12 @@ private_key="0x12d7de8621a77640c9241b2595ba78ce443d05e94090365ab3bb5e19df82c625"
 # rpc_url="http://127.0.0.1:42782"
 # private_key="0x12d7de8621a77640c9241b2595ba78ce443d05e94090365ab3bb5e19df82c625"
 
+# Base
+# rpc_url="https://mainnet.base.org"
+# private_key="0xf8838419851584cdef022b05e6c1b747e047d542d464ffa1b52f7ec90b3b2ac1"
 
 eth_address=$(cast wallet address --private-key $private_key)
 cast balance --ether --rpc-url $rpc_url $eth_address
-
-fund_amount="1000ether"
-test_mnemonic="math mixture girl hood this crouch abuse record wet grocery awful skill"
-
-for i in {0..9}; do
-    cur_addr=$(cast wallet address --mnemonic "$test_mnemonic" --mnemonic-index "$i")
-    cur_bal=$(cast balance --ether --rpc-url $rpc_url $cur_addr)
-    has_balance=$(bc <<< "$cur_bal > 0.5")
-    if [[ $has_balance -eq 0 ]]; then
-        cast send --legacy --rpc-url "$rpc_url" --private-key "$private_key" --value "$fund_amount" "$cur_addr" > /dev/null
-        echo "Funded $fund_amount to $cur_addr"
-    else
-        echo "$cur_addr is already funded with $cur_bal"
-    fi
-done
-
 
 deployment_proxy=$(cast code --rpc-url $rpc_url 0x4e59b44847b379578588920ca78fbf26c0b4956c)
 
@@ -76,10 +63,27 @@ if [[ $deployed_code == "0x" ]]; then
 fi
 echo "The counters contract should be deployed: $counters_addr"
 
+fund_amount="1000ether"
+# fund_amount="1000ether"
+test_mnemonic="math mixture girl hood this crouch abuse record wet grocery awful skill"
 
 # TEMPORARY fund the claim tx manager
 cast send --legacy --rpc-url "$rpc_url" --private-key "$private_key" --value "$fund_amount" "0x5f5dB0D4D58310F53713eF4Df80ba6717868A9f8" > /dev/null
 # TEMPORARY fund the claim sponsor
 cast send --legacy --rpc-url "$rpc_url" --private-key "$private_key" --value "$fund_amount" "0xfa291C5f54E4669aF59c6cE1447Dc0b3371EF046" > /dev/null
+
+
+for i in {0..9}; do
+    cur_addr=$(cast wallet address --mnemonic "$test_mnemonic" --mnemonic-index "$i")
+    cur_bal=$(cast balance --ether --rpc-url $rpc_url $cur_addr)
+    has_balance=$(bc <<< "$cur_bal > 0.5")
+    if [[ $has_balance -eq 0 ]]; then
+        cast send --legacy --rpc-url "$rpc_url" --private-key "$private_key" --value "$fund_amount" "$cur_addr" > /dev/null
+        echo "Funded $fund_amount to $cur_addr"
+    else
+        echo "$cur_addr is already funded with $cur_bal"
+    fi
+done
+
 
 polycli wallet inspect --mnemonic "$test_mnemonic" | jq '[.Addresses[] | del(.HexPublicKey) | del(.HexFullPublicKey) | del(.BTCAddress) | del(.WIF)]'

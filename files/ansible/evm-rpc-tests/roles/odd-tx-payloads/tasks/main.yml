@@ -1,13 +1,13 @@
 ---
 - name: Send a legacy transaction
   ansible.builtin.shell: |
-    cast send --gas-price 100gwei --legacy --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 -j {{ eth_address }} "0x646174613a2c7b226d7367223a226c6567616379227d" >> {{ log_file }}
+    cast send --gas-price 100gwei --legacy --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --json {{ eth_address }} "0x646174613a2c7b226d7367223a226c6567616379227d" >> {{ log_file }}
   args:
     executable: /bin/bash
 
 - name: Send an eip 1559 transaction
   ansible.builtin.shell: |
-    cast send --gas-price 100gwei --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 -j {{ eth_address }} "0x646174613a2c7b226d7367223a226569702d31353539227d" >> {{ log_file }}
+    cast send --gas-price 100gwei --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --json {{ eth_address }} "0x646174613a2c7b226d7367223a226569702d31353539227d" >> {{ log_file }}
   args:
     executable: /bin/bash
   ignore_errors: true

@@ -4,47 +4,47 @@
   ansible.builtin.shell: |
     cur_nonce=$(cast nonce --rpc-url {{ rpc_url }} {{ eth_address }})
 
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000000" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000000" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000001" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000001" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000002" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000002" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000003" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000003" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000004" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000004" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000005" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000005" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000006" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000006" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000007" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000007" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000008" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000008" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x0000000000000000000000000000000000000009" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x0000000000000000000000000000000000000009" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x000000000000000000000000000000000000000A" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x000000000000000000000000000000000000000A" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x4D1A2e2bB4F88F0250f26Ffff098B0b30B26BF38" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x4D1A2e2bB4F88F0250f26Ffff098B0b30B26BF38" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0xdeadbeef00000000000000000000000000000000" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0xdeadbeef00000000000000000000000000000000" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0xB928f69Bb1D91Cd65274e3c79d8986362984fDA3" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0xB928f69Bb1D91Cd65274e3c79d8986362984fDA3" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0xD04116cDd17beBE565EB2422F2497E06cC1C9833" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0xD04116cDd17beBE565EB2422F2497E06cC1C9833" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x70f2b2914A2a4b783FaEFb75f459A580616Fcb5e" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x70f2b2914A2a4b783FaEFb75f459A580616Fcb5e" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x60f3f640a8508fC6a86d45DF051962668E1e8AC7" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x60f3f640a8508fC6a86d45DF051962668E1e8AC7" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x1d8bfDC5D46DC4f61D6b6115972536eBE6A8854C" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x1d8bfDC5D46DC4f61D6b6115972536eBE6A8854C" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0xE33C0C7F7df4809055C3ebA6c09CFe4BaF1BD9e0" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0xE33C0C7F7df4809055C3ebA6c09CFe4BaF1BD9e0" >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 -j "0x000000000000000000000000000000005ca1ab1e" >> {{ log_file }}
+    cast send --async --nonce $cur_nonce --legacy --from {{ eth_address }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 --value 2 --json "0x000000000000000000000000000000005ca1ab1e" >> {{ log_file }}
   args:
     executable: /bin/bash
 
@@ -63,7 +63,7 @@
 - name: Deploy the address tester
   ansible.builtin.shell: |
     pushd {{ work_dir }} || exit 1
-    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j \
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json \
         --create $(cat address-tester.deploy.bin) | jq '.' > address-tester.deploy.bin.deployment
   args:
     executable: /bin/bash
@@ -77,79 +77,79 @@
 
     touch {{ item.0 }}.{{ item.1 }}.{{ item.2 }}.started
 
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000001{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000001{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000002{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000002{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000003{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000003{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000004{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000004{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000011{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000011{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000012{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000012{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000013{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000013{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000014{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000014{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000021{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000021{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000022{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000022{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000023{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000023{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000024{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000024{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000031{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000031{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000032{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000032{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000033{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000033{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000034{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000034{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000041{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000041{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000042{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000042{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000043{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000043{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000044{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000044{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000101{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000101{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000201{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000201{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000301{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000301{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000401{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000401{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000501{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000501{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000601{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000601{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000701{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000701{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000801{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000801{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000901{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000000901{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000001001{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000001001{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000001002{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000001002{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000001003{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000001003{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000001004{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000001004{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000002001{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000002001{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000002002{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000002002{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000002003{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000002003{{ item.0 }}{{ item.2 }} >> {{ log_file }}
     cur_nonce=$((cur_nonce + 1))
-    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000002004{{ item.0 }}{{ item.2 }} >> {{ log_file }}
+    cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json --value 100 --gas-limit {{ item.1 }} $tester 0000000000000000000000000000000000000000000000000000000000002004{{ item.0 }}{{ item.2 }} >> {{ log_file }}
 
     sleep 3
 
@@ -159,7 +159,7 @@
     while [[ $cur_nonce -ne $last_nonce ]] ; do
         inscr_data=$(echo -n 'data:,{"msg":"Special Test: {{ item.0 }}"}' | xxd -p | tr -d "\n")
 
-        cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j {{ eth_address }} 0x$inscr_data >> {{ log_file }}
+        cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json {{ eth_address }} 0x$inscr_data >> {{ log_file }}
 
         cur_nonce=$(cast nonce --block pending --rpc-url {{ rpc_url }} {{ eth_address }})
         last_nonce=$(cast nonce --rpc-url {{ rpc_url }} {{ eth_address }})

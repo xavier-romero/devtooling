@@ -13,7 +13,7 @@
     gas_price=$(bc <<< "2 * $gas_price")
     cat 500-random-contracts.txt | while read -r line; do
         echo "Contract -- $line" >> 500-random-contracts.out
-        cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --gas-limit 250000 --gas-price $gas_price --rpc-url {{ rpc_url }} -j \
+        cast send {{ legacy_flag }} --async --nonce $cur_nonce --private-key {{ private_key }} --gas-limit 250000 --gas-price $gas_price --rpc-url {{ rpc_url }} --json \
             --create "$line" &>> 500-random-contracts.out
         retVal=$?
         if [[ $retVal -eq 0 ]]; then

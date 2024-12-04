@@ -2,13 +2,12 @@
 
 
 # KURTOSIS
-rpc_url="$(kurtosis port print cdk cdk-erigon-node-001 rpc)"
-send_flags=" --legacy "
+rpc_url="$(kurtosis port print cdk el-1-geth-lighthouse rpc)"
+send_flags=""
 lxly_bridge_addr="0x9d6944138d94bf23a3A7a01C384ba7679Bd74798"
 private_key="0x3869bfbc61895584db60067dac776d14f2eedc27495a38c860acc9a754cdaf32"
 eth_address="$(cast wallet address --private-key $private_key)"
-
-
+destination_network="1"
 bridge_sig="bridgeAsset(uint32,address,uint256,address,bool,bytes)"
 
 nonce=$(cast nonce --rpc-url $rpc_url "$eth_address")
@@ -27,8 +26,6 @@ function increment_nonce() {
 
 function make_random_deposit() {
     local deposit_count="$1"
-
-    local destination_network="0"
     local destination_address="$eth_address"
     local amount="$deposit_count"
     local token="0x0000000000000000000000000000000000000000"
@@ -54,7 +51,6 @@ function make_random_deposit() {
     cast send $send_flags $timeout_flag \
          --nonce "$(increment_nonce "$nonce_file")" \
          --rpc-url "$rpc_url" \
-         --gas-limit 500000 \
          --gas-price "$gas_price" \
          --value "$amount" \
          --private-key $private_key \

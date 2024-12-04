@@ -8,21 +8,21 @@
 - name: Deploy polycli ERC20 Contract
   ansible.builtin.shell: |
     pushd {{ work_dir }} || exit 1
-    cast send -j {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --create "$(cat polycli-contracts/ERC20.bin)" > erc20.out.json
+    cast send --json {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --create "$(cat polycli-contracts/ERC20.bin)" > erc20.out.json
   args:
     executable: /bin/bash
 
 - name: Deploy polycli ERC721 Contract
   ansible.builtin.shell: |
     pushd {{ work_dir }} || exit 1
-    cast send -j {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --create "$(cat polycli-contracts/ERC721.bin)" > erc721.out.json
+    cast send --json {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --create "$(cat polycli-contracts/ERC721.bin)" > erc721.out.json
   args:
     executable: /bin/bash
 
 - name: Deploy polycli Loadtest Contract
   ansible.builtin.shell: |
     pushd {{ work_dir }} || exit 1
-    cast send -j {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --create "$(cat polycli-contracts/LoadTester.bin)" > LoadTester.out.json
+    cast send --json {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --create "$(cat polycli-contracts/LoadTester.bin)" > LoadTester.out.json
   args:
     executable: /bin/bash
 

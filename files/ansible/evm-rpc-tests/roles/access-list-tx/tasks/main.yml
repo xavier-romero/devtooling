@@ -3,7 +3,7 @@
 - name: Deploy loop-sload-to-gas-limit to hit lots of storage slots
   ansible.builtin.shell: |
     cast send \
-        -j \
+        --json \
         --legacy \
         --from {{ eth_address }} \
         --private-key {{ private_key }} \
@@ -16,7 +16,7 @@
 - name: Call the contract without access list
   ansible.builtin.shell: |
     cast send \
-        -j \
+        --json \
         --legacy \
         --private-key {{ private_key }} \
         --rpc-url {{ rpc_url }} \

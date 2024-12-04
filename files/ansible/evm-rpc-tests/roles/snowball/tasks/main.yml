@@ -15,7 +15,7 @@
 - name: Call the snowball test function a buch of times
   ansible.builtin.shell: |
     pushd {{ work_dir }} || exit 1
-    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} "$(jq -r .deployedTo snowball.out.tmp.json)" -j \
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} "$(jq -r .deployedTo snowball.out.tmp.json)" --json \
          'test(uint64,uint32,uint256)(bytes32)' \
          {{ item.seed }} {{ item.loops }} {{ item.mode }} | jq '.' &>> {{ log_file }}
   args:
@@ -31,7 +31,7 @@
 - name: Call the snowball prime function a buch of times
   ansible.builtin.shell: |
     pushd {{ work_dir }} || exit 1
-    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} "$(jq -r .deployedTo snowball.out.tmp.json)" -j \
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} "$(jq -r .deployedTo snowball.out.tmp.json)" --json \
          'calcPrimes(uint256)(uint256)' {{ item.primes }} | jq '.' &>> {{ log_file }}
   args:
     executable: /bin/bash

@@ -14,7 +14,7 @@
 - name: Deploy the every opcode contracts
   ansible.builtin.shell: |
     pushd {{ work_dir }} || exit 1
-    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j \
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --json \
         --create $(cat {{ item }}) | jq '.' > {{ item }}.deployment
   args:
     executable: /bin/bash
@@ -27,7 +27,7 @@
 - name: Call the every op code contract
   ansible.builtin.shell: |
     pushd {{ work_dir }} || exit 1
-    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} "$(jq -r .contractAddress {{ item }}.deployment)" -j | jq '.' &>> {{ log_file }}
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} "$(jq -r .contractAddress {{ item }}.deployment)" --json | jq '.' &>> {{ log_file }}
   args:
     executable: /bin/bash
   loop:
