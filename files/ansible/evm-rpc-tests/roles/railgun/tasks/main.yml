@@ -1,0 +1,31 @@
+---
+- name: Git clone Railgun repo
+  ansible.builtin.git:
+    repo: https://github.com/praetoriansentry/railgun-contract.git
+    dest: "{{ work_dir }}/railgun"
+    version: "56d7ad3bc420e2b43a27826e6b7ded5d8bd53eaf"
+    force: true
+
+- name: Setup Railgun
+  ansible.builtin.shell: |
+    pushd {{ work_dir }}/railgun || exit 1
+    npm i &>> {{ log_file }}
+    sed -i 's#defaultNetwork.*hardhat.*#defaultNetwork: "rpctests", networks: { rpctests: {url: "{{ rpc_url }}", accounts: ["{{ private_key }}"]} },#i' hardhat.config.ts &>> {{ log_file }}
+    popd
+  args:
+    executable: /bin/bash
+
+- name: Setup Railgun
+  ansible.builtin.shell: |
+    pushd {{ work_dir }}/railgun || exit 1
+    npx hardhat deploy:test --network rpctests &>> {{ log_file }}
+    popd
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Finished Railgun Deployment

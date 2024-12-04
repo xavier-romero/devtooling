@@ -54,10 +54,16 @@ The ```x``` before each command is just a wrapper to set the proper env varibles
 You can also just ```docker exec -it devtooling bash``` and run whatever inside.
 
 
-# Available files
+# Available files/content
 On ```/files``` folder:
 - ```polycli-retest.json```: Output of polycli retest as per 3rd December 2024
 - ```FuzzEVMRunner```: Fuzzed bytecodes from [John's go-ethereum repo](https://github.com/praetoriansentry/go-ethereum/tree/master/cmd/evm/testdata/fuzz/FuzzEVMRunner), meant to be run with ```run-fuzzed.sh```
+- ```scripted```: Folder with JSON tests for the ```scripted``` tool
+
+On ```/repos``` folder:
+- ```eth-bench```: Copy of repository https://github.com/xavier-romero/eth-bench
+- ```polygon-cli```: Copy of repository https://github.com/0xPolygon/polygon-cli
+
 
 ## Bridging
 Run the docker image with the required config, so it will be able to execute anything later.

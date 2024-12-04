@@ -1,0 +1,234 @@
+---
+
+# TODO add the scenario where we recursively recreate the contract over and over again
+# TODO add the scenario where high priced large transactions can cause an empty batch even if they can't be mined
+
+# https://github.com/0xPolygonHermez/cdk-erigon/issues/1044
+- name: zkEVM + Erigon invalid implementation of FB opcode
+  ansible.builtin.shell: |
+    cast send --legacy --gas-limit 1000000 --rpc-url {{ rpc_url }} --private-key {{ private_key }} --create 5ffb >> {{ log_file }}
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: zkEVM + Erigon invalid implementation of FB opcode
+
+# https://github.com/0xPolygonHermez/cdk-erigon/issues/1046
+# echo '{ (MSTORE 0 0) [[ 0 ]] (CREATE 0 0 0xfffffffffff) }' | lllc
+- name: Erigon OMM for Large Call
+  ansible.builtin.shell: |
+    cast call --rpc-url {{ rpc_url }} --create 6000600052650fffffffffff60006000f060005500 >> {{ log_file }}
+    cast send {{ legacy_flag }} --gas-limit 29999999 --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 0x6000600052650fffffffffff60006000f060005500 >> {{ log_file }}
+    cast block-number --rpc-url {{ rpc_url }}
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Erigon OMM for Large Call
+
+# echo '{ (return 0 (sub 0 1)) }' | lllc
+- name: Erigon Large Return
+  ansible.builtin.shell: |
+    cast rpc --rpc-url {{ rpc_url }} debug_traceCall '{"input": "0x60016000036000f300"}' latest >> {{ log_file }}
+    cast send {{ legacy_flag }} --gas-limit 29999999 --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 0x60016000036000f300 >> {{ log_file }}
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Erigon Large Return
+
+# echo '{ (return 0 (sub 0 1)) }' | lllc
+- name: Erigon Create2 Large Return
+  ansible.builtin.shell: |
+    # wrap the contract
+    nonce=$(cast nonce --rpc-url {{ rpc_url }})
+    cast send --legacy --rpc-url {{ rpc_url }} --private-key {{ private_key }} --gas-limit 150000 --create 6300000024630000001560003963000000246000F36000600052600063ffffffff60006001f500  >> {{ log_file }}
+    addr=$(cast compute-address --nonce 1 {{ eth_address }} | sed 's/.*: //')
+    cast send --legacy --rpc-url {{ rpc_url }} --private-key {{ private_key }} --gas-limit 150000 $addr >> {{ log_file }}
+
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Erigon Create2 Large Return
+
+# https://github.com/0xPolygonHermez/cdk-erigon/issues/1073
+# echo '{ (return 0 (sub 0 1)) }' | lllc
+- name: zkEVM Malformed Push Handling
+  ansible.builtin.shell: |
+    nonce=$(cast nonce --rpc-url {{ rpc_url }})
+    cast send --legacy --rpc-url {{ rpc_url }} --private-key {{ private_key }} --create 6300000001630000001560003963000000016000F360
+    addr=$(cast compute-address --nonce 1 {{ eth_address }} | sed 's/.*: //')
+    cast send --legacy --rpc-url {{ rpc_url }} --private-key {{ private_key }} $addr
+
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: zkEVM Malformed Push Handling
+
+
+# https://github.com/0xPolygonHermez/cdk-erigon/issues/1136
+- name: zkEVM Wrong SHA counters
+  ansible.builtin.shell: |
+    rpc_url={{ rpc_url }}
+    private_key={{ private_key }}
+    eth_address=$(cast wallet address --private-key $private_key)
+
+    nonce=$(cast nonce --rpc-url $rpc_url $eth_address)
+    cast send --legacy --private-key $private_key --rpc-url $rpc_url --create 601E600C600039601E6000F360016000526001611000525B600160015F355F60025AF4630000000B5600
+
+    contract_address=$(cast compute-address --nonce $nonce $eth_address | sed 's/.*: //')
+
+    nonce=$(cast nonce --rpc-url $rpc_url $eth_address)
+    for i in {1..5}; do
+        cast send --async --nonce $nonce --legacy --private-key $private_key --rpc-url $rpc_url --gas-limit 100000 $contract_address 0x0000000000000000000000000000000000000000000000000000000000000139
+        nonce=$((nonce+1))
+    done
+
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: zkEVM Wrong SHA counters
+
+# cast rpc --rpc-url http://127.0.0.1:33627 eth_call '{ "input": "0x'$(lllc <<< '{ (MSTORE 100 100) (CREATE2 0x8c 0x8c 0x6234608c608c 0x17179149)}')'" }' latest
+# In this case, if the server is running at the end we're fine
+- name: Erigon CREATE2 OOM found by Xavi
+  ansible.builtin.shell: |
+    cast call --rpc-url {{ rpc_url }} --create "0x60646064526317179149656234608c608c608c608cf500" >> {{ log_file }}
+    cast rpc --rpc-url {{ rpc_url }} debug_traceCall '{ "input": "0x60646064526317179149656234608c608c608c608cf500" }' latest >> {{ log_file }}
+    sleep {{ block_interval }}
+    cast block-number --rpc-url {{ rpc_url }}
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Erigon CREATE2 OOM found by Xavi
+
+# this contract is manually written since it's not really possible to compile something like this
+- name: Executable PUSH operand
+  ansible.builtin.shell: |
+    cast send {{ legacy_flag }} --gas-limit 100000 --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 6b5b600160015B81019060065650600156 >> {{ log_file }}
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Executable PUSH operand
+
+# echo '{ (CODECOPY 0 0 (CODESIZE)) (CREATE 0 0 (CODESIZE)) }' | lllc
+- name: Recursive creation forever
+  ansible.builtin.shell: |
+    cast send {{ legacy_flag }} --gas-limit 29999999 --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 3860006000393860006000f000 >> {{ log_file }}
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Add inscription to mark test end
+
+# This assumes deterministic deployment of the counters contract!!
+- name: Trigger empty batches
+  ansible.builtin.shell: |
+    start_bn=$(cast rpc --rpc-url http://127.0.0.1:34145 zkevm_batchNumber | jq -r '.' | perl -nwl -e "print hex")
+    for i in {1..5}; do
+        cast send --async {{ legacy_flag }} --gas-limit 29999999 --legacy --private-key {{ private_key }} --rpc-url {{ rpc_url }} 0xCb31D71c184a83831670dc46AEa45b5eBEa281A9 0000000000000000000000000000000000000000000000000000000000000005 >> {{ log_file }}
+        sleep 1
+    done
+    start_bn=$((start_bn+2))
+    end_bn=$(cast rpc --rpc-url http://127.0.0.1:34145 zkevm_batchNumber | jq -r '.' | perl -nwl -e "print hex")
+    if [[ $end_bn -gt $start_bn ]]; then
+        echo "It looks like more than 2 two batches were created while sending unmineable transactions"
+        exit 1
+    fi
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Trigger empty batches
+
+- name: Erigon IDENTITY precompile not computing counters
+  ansible.builtin.shell: |
+    # specify your RPC
+    rpc_url={{ rpc_url }}
+    # some private key that's funded to run the transactions
+    private_key={{ private_key }}
+    eth_address=$(cast wallet address --private-key $private_key)
+
+    # deploy the contract!
+    nonce=$(cast nonce --rpc-url $rpc_url $eth_address)
+    cast send --legacy --rpc-url $rpc_url --private-key $private_key --create 6016600C60003960166000F36001600052600160003552595F595F595F60045AFA00
+
+    # get the address (you could fill this in directly as well)
+    contract_address=$(cast compute-address --nonce $nonce $eth_address | sed 's/.*: //')
+
+    # This is a test call, shouldn't mess with the state or break anything
+    cast call --rpc-url $rpc_url --from $eth_address --value 1 --gas-limit 29999999 $contract_address 0x00000000000000000000000000000000000000000000000000000000003C1E80
+
+    # This maximizes gas, but doesn't trigger the issue... I don't see any warnings about undershoot. This is quite bizarre that this doesn't trigger the issue
+    cast send --legacy --rpc-url $rpc_url --private-key $private_key --value 1 --gas-limit 29999999 $contract_address 0x00000000000000000000000000000000000000000000000000000000003C1E80
+
+    # This triggers undershoot warnings and can cause the issue. If I only send one per batch I don't see an issue
+    timeout {{ cast_timeout }} cast send --legacy --rpc-url $rpc_url --private-key $private_key --value 1 --gas-limit 29999999 $contract_address 0x00000000000000000000000000000000000000000000000000000000003BBDE0
+
+    # This should trigger the issue right away:
+    nonce=$(cast nonce --rpc-url $rpc_url $eth_address)
+    for i in {1..5}; do
+        cast send --async \
+            --nonce $nonce \
+            --legacy \
+            --rpc-url $rpc_url \
+            --private-key $private_key \
+            --value 1 \
+            --gas-limit 29999999 \
+            $contract_address 0x00000000000000000000000000000000000000000000000000000000003BBDE0
+        nonce=$((nonce+1))
+    done
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Erigon IDENTITY precompile not computing counters

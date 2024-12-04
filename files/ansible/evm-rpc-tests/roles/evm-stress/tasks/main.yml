@@ -1,0 +1,41 @@
+---
+- name: Copy the evm stress contracts
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ work_dir }}"
+  loop: "{{ stress_contracts }}"
+
+
+- name: Deploying and executing evm stress contracts
+  ansible.builtin.shell: |
+    tdir=$(mktemp -d -p {{ work_dir }})
+    pushd $tdir || exit 1
+    echo "{{ item }}" &>> {{ log_file }}
+    cast send --timeout {{ cast_timeout }} {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat ../{{ item }}) 2>&1 | tee {{ item }}.deployment &>> {{ log_file }}
+    ret_code=$?
+    if [[ $ret_code -ne 0 ]]; then
+        echo "the contract {{ item }} failed to deploy due to a {{ cast_timeout }}s timeout" >> {{ log_file }}
+        exit 1
+    fi
+
+    for gas_limit in 200000 {{ max_block_size }}; do
+        echo "cast send --timeout {{ cast_timeout }} --gas-limit $gas_limit {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j $(jq -r '.contractAddress' {{ item }}.deployment)" >> {{ log_file }}
+        cast send --timeout {{ cast_timeout }} --gas-limit $gas_limit {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j $(jq -r '.contractAddress' {{ item }}.deployment) 2>&1 | tee -a {{ item }}.exec &>> {{ log_file }}
+
+        ret_code=$?
+        if [[ $ret_code -ne 0 ]]; then
+            echo "the contract {{ item }} failed to execute due to a {{ cast_timeout }}s timeout" >> {{ log_file }}
+            exit 1
+        fi
+    done
+  args:
+    executable: /bin/bash
+  loop: "{{ stress_contracts }}"
+  ignore_errors: true
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Finished EVM Stress Tests

@@ -1,0 +1,96 @@
+These are the selectors for the current repo. In each case, I'd like
+to have a range of transactions hit each contract in order to stress
+the network.
+
+
+- SCL_sha512
+  - [X] HashLE(uint256)
+- SCL_EIP6565
+  - [X] BasePointMultiply(uint256)
+  - [X] BasePointMultiply_Edwards(uint256)
+  - [X] ExpandSecret(uint256)
+  - [X] HashInternal(uint256,uint256,string)
+  - [X] SetKey(uint256)
+  - [X] Sign(uint256,uint256[2],string)
+  - [X] SignSlow(uint256,string)
+  - [X] Verify(string,uint256,uint256,uint256[5])
+  - [X] Verify_LE(string,uint256,uint256,uint256[5])
+  - [X] ecPow128(uint256,uint256,uint256,uint256)
+  - [X] edCompress(uint256[2])
+- SCL_RIP7212
+  - [X] verify(bytes32,uint256,uint256,uint256,uint256)
+- SCL_ECCUTILS
+  - [ ] SetKey(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
+  - [ ] ecCheckPrecompute(uint256[10])
+  - [ ] ecPow128(uint256,uint256,uint256,uint256,uint256,uint256)
+- SCL_ECDSAB4
+  - [X] verify(bytes32,uint256,uint256,uint256[10],uint256)
+
+
+
+#+begin_example
+SCL_sha512
++----------+-----------------+------------+
+| Type     | Signature       | Selector   |
++=========================================+
+| Function | HashLE(uint256) | 0xff47df57 |
++----------+-----------------+------------+
+
+SCL_EIP6565
++----------+----------------------------------------------+------------+
+| Type     | Signature                                    | Selector   |
++======================================================================+
+| Function | BasePointMultiply(uint256)                   | 0x3fc4e4e5 |
+|----------+----------------------------------------------+------------|
+| Function | BasePointMultiply_Edwards(uint256)           | 0xf07ce245 |
+|----------+----------------------------------------------+------------|
+| Function | ExpandSecret(uint256)                        | 0x93846b84 |
+|----------+----------------------------------------------+------------|
+| Function | HashInternal(uint256,uint256,string)         | 0x55cc95a4 |
+|----------+----------------------------------------------+------------|
+| Function | SetKey(uint256)                              | 0x988397ed |
+|----------+----------------------------------------------+------------|
+| Function | Sign(uint256,uint256[2],string)              | 0x9c1e8197 |
+|----------+----------------------------------------------+------------|
+| Function | SignSlow(uint256,string)                     | 0xe6d9359e |
+|----------+----------------------------------------------+------------|
+| Function | Verify(string,uint256,uint256,uint256[5])    | 0xa4b5f866 |
+|----------+----------------------------------------------+------------|
+| Function | Verify_LE(string,uint256,uint256,uint256[5]) | 0x369b6921 |
+|----------+----------------------------------------------+------------|
+| Function | ecPow128(uint256,uint256,uint256,uint256)    | 0x6b8cf2e0 |
+|----------+----------------------------------------------+------------|
+| Function | edCompress(uint256[2])                       | 0x4f251b31 |
++----------+----------------------------------------------+------------+
+
+SCL_RIP7212
++----------+-------------------------------------------------+------------+
+| Type     | Signature                                       | Selector   |
++=========================================================================+
+| Function | verify(bytes32,uint256,uint256,uint256,uint256) | 0xa1f31281 |
++----------+-------------------------------------------------+------------+
+
+SCL_ECCUTILS
++----------+-----------------------------------------------------------------+------------+
+| Type     | Signature                                                       | Selector   |
++=========================================================================================+
+| Function | SetKey(uint256,uint256,uint256,uint256,uint256,uint256,uint256) | 0xc0860e31 |
+|----------+-----------------------------------------------------------------+------------|
+| Function | ecCheckPrecompute(uint256[10])                                  | 0x3689e190 |
+|----------+-----------------------------------------------------------------+------------|
+| Function | ecPow128(uint256,uint256,uint256,uint256,uint256,uint256)       | 0x8e500fdd |
++----------+-----------------------------------------------------------------+------------+
+
+SCL_ECDSAB4
++----------+-----------------------------------------------------+------------+
+| Type     | Signature                                           | Selector   |
++=============================================================================+
+| Function | verify(bytes32,uint256,uint256,uint256[10],uint256) | 0xb096730c |
++----------+-----------------------------------------------------+------------+
+#+end_example
+
+
+    for i in {1..16}; do
+        echo $i;
+        echo "$(printf '00112233445566778899AABBCCDDEEFF%.0s' {1..$i})";
+    done

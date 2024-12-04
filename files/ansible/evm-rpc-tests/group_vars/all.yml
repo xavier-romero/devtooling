@@ -1,0 +1,48 @@
+---
+
+# this is the json RPC URL that we'll use for all tests that require
+# an RPC. It doesn't matter if this is L1 or L2.
+rpc_url: https://rpc.internal.zkevm-rpc.com
+# rpc_url: http://127.0.0.1:34180
+# rpc_url: http://34.175.214.161:18123 # integration network 8
+
+# this is the hex private key that we'll use for sending
+# transactions. It's expected that this key has some value
+private_key: "0x9d689ab7a9b4988e0fbebd51e132769ee9a3dd9bf0c91969ac3022e41f8b88ec" # bali
+# private_key: "0xbcdf20249abf0ed6d944c0288fad489e33f66b3960d9e6229c1cd214ed3bbe31" # kurtosis-eth
+# private_key: "0x12d7de8621a77640c9241b2595ba78ce443d05e94090365ab3bb5e19df82c625" # kurtosis-cdk
+# private_key: "0x9d689ab7a9b4988e0fbebd51e132769ee9a3dd9bf0c91969ac3022e41f8b88ec" # integration network 8
+# private_key: "5fd01bdc49d47a1c6561d22b7fba24f15a8dafa798c3571c8f64fdbb18daef9e" # test setup m/44'/60'/0'/0/4
+
+# the eth address can be determined from the private key, but it's
+# convent to have both as variables here
+eth_address: "0xb36D1F31a26E2a41Ea02425B1cFCF8448adBDc09" # bali
+# eth_address: "0x8943545177806ED17B9F23F0a21ee5948eCaa776" # kurtosis-eth
+# eth_address: "0xE34aaF64b29273B7D567FCFc40544c014EEe9970" # kurtosis-cdk
+# eth_address: "0xb36D1F31a26E2a41Ea02425B1cFCF8448adBDc09" # integration network 8
+# eth_address: "0xc6926E32056b983360a37F8853E3f8cF3eBc7927" # test setup m/44'/60'/0'/0/4
+
+# Some of the commands will write out logs. This is the file where
+# they should go
+log_file: /tmp/rpc-tests.log
+
+# Some of the commands will create files / directories, this is the
+# location for working
+work_dir: /tmp/rpc-tests.d
+
+# A configuration that we should use for configure the largest size of
+# tx
+# max_block_size: 12_317_082
+# max_block_size: 1_000_000
+max_block_size: 29_999_999
+# max_block_size: 120_000
+
+# Specifically a flag to send eip-1559 tx
+legacy_flag: "--legacy"
+# legacy_flag: ""
+
+# A block interval that's used for setting a timeout period
+block_interval: 6
+
+# The amount of time to wait for cast to wait for a transaction to be mined
+cast_timeout: 30

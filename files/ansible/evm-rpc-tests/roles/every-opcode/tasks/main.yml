@@ -1,0 +1,59 @@
+---
+
+
+- name: Copy the every opcode smart contracts
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ work_dir }}"
+  loop:
+    - every-opcode.deploy.bin
+    - every-opcode-cancun.deploy.bin
+    - every-opcode-london.deploy.bin
+    - every-opcode-shanghai.deploy.bin
+
+- name: Deploy the every opcode contracts
+  ansible.builtin.shell: |
+    pushd {{ work_dir }} || exit 1
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j \
+        --create $(cat {{ item }}) | jq '.' > {{ item }}.deployment
+  args:
+    executable: /bin/bash
+  loop:
+    - every-opcode.deploy.bin
+    - every-opcode-cancun.deploy.bin
+    - every-opcode-london.deploy.bin
+    - every-opcode-shanghai.deploy.bin
+
+- name: Call the every op code contract
+  ansible.builtin.shell: |
+    pushd {{ work_dir }} || exit 1
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} "$(jq -r .contractAddress {{ item }}.deployment)" -j | jq '.' &>> {{ log_file }}
+  args:
+    executable: /bin/bash
+  loop:
+    - every-opcode.deploy.bin
+    - every-opcode-cancun.deploy.bin
+    - every-opcode-london.deploy.bin
+    - every-opcode-shanghai.deploy.bin
+
+# The gas limit here is meant to speed things up vs being a block gas limit.
+- name: Call the every op code contract many times
+  ansible.builtin.shell: |
+    pushd {{ work_dir }} || exit 1
+    polycli loadtest {{ legacy_flag }} --private-key {{ private_key }} --mode cc --rate-limit 1000 --requests 12 --concurrency 5 \
+        --contract-address "$(jq -r '.contractAddress' {{ item }}.deployment)" --calldata "0xDEADBEEF01" --rpc-url {{ rpc_url }} --gas-limit 500000 &>> {{ log_file }}
+  args:
+    executable: /bin/bash
+  loop:
+    - every-opcode.deploy.bin
+    - every-opcode-cancun.deploy.bin
+    - every-opcode-london.deploy.bin
+    - every-opcode-shanghai.deploy.bin
+
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Finished Every Opcode Tests

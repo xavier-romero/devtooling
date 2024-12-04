@@ -1,0 +1,104 @@
+---
+# https://eips.ethereum.org/EIPS/eip-6780
+# Immediate self destruct
+# 5F35FF00 - CALLDATA LOAD
+# 32FF00 - ORIGIN
+
+# Deployable self destruct
+# 6004600C60003960046000F35F35FF00
+
+# Deployable reverter
+# 6003600C60003960036000F35F5FFD
+
+- name: Call immediate SELFDESTRUCT with no call data and no value
+  ansible.builtin.shell: |
+    pushd {{ work_dir }} || exit 1
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --create 5F35FF00 &>> {{ log_file }}
+    popd
+  args:
+    executable: /bin/bash
+
+- name: Call immediate SELFDESTRUCT with origin and no value
+  ansible.builtin.shell: |
+    pushd {{ work_dir }} || exit 1
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --create 32FF00 &>> {{ log_file }}
+    popd
+  args:
+    executable: /bin/bash
+
+- name: Call immedate SELFDESTRUCT with origin and 1gwei
+  ansible.builtin.shell: |
+    pushd {{ work_dir }} || exit 1
+    cast send {{ legacy_flag }} --value 1gwei --private-key {{ private_key }} --rpc-url {{ rpc_url }} --create 32FF00 &>> {{ log_file }}
+    popd
+  args:
+    executable: /bin/bash
+
+- name: Deploy the self destruct contract with no value and then call it
+  ansible.builtin.shell: |
+    tdir=$(mktemp -d -p {{ work_dir }})
+    pushd $tdir || exit 1
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create 6004600C60003960046000F35F35FF00 | tee selfdestroy.json &>> {{ log_file }}
+    echo "Code before self destruct: " &>> {{ log_file }}
+    cast code --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    echo "Balance before self destruct: " &>> {{ log_file }}
+    cast balance --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) {{ eth_address }} &>> {{ log_file }}
+    echo "Code after self destruct: " &>> {{ log_file }}
+    cast code --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    echo "Balance after self destruct: " &>> {{ log_file }}
+    cast balance --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    # try to call it again even though it was just self destructed
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) {{ eth_address }} &>> {{ log_file }}
+    popd
+  args:
+    executable: /bin/bash
+
+- name: Deploy the self destruct contract with some value and then call it
+  ansible.builtin.shell: |
+    tdir=$(mktemp -d -p {{ work_dir }})
+    pushd $tdir || exit 1
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --value 43gwei --rpc-url {{ rpc_url }} -j --create 6004600C60003960046000F35F35FF00 | tee selfdestroy.json &>> {{ log_file }}
+    echo "Code before self destruct: " &>> {{ log_file }}
+    cast code --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    echo "Balance before self destruct: " &>> {{ log_file }}
+    cast balance --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) {{ eth_address }} &>> {{ log_file }}
+    echo "Code after self destruct: " &>> {{ log_file }}
+    cast code --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    echo "Balance after self destruct: " &>> {{ log_file }}
+    cast balance --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    # try to call it again even though it was just self destructed
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) {{ eth_address }} &>> {{ log_file }}
+    popd
+  args:
+    executable: /bin/bash
+
+
+- name: Deploy the self destruct contract with some value and then set target to a reverting contract
+  ansible.builtin.shell: |
+    tdir=$(mktemp -d -p {{ work_dir }})
+    pushd $tdir || exit 1
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --value 47gwei --rpc-url {{ rpc_url }} -j --create 6003600C60003960036000F35F5FFD | tee reverter.json &>> {{ log_file }}
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --value 47gwei --rpc-url {{ rpc_url }} -j --create 6004600C60003960046000F35F35FF00 | tee selfdestroy.json &>> {{ log_file }}
+    echo "Code before self destruct: " &>> {{ log_file }}
+    cast code --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    echo "Balance before self destruct: " &>> {{ log_file }}
+    cast balance --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) $(jq -r '.contractAddress' reverter.json) &>> {{ log_file }}
+    echo "Code after self destruct: " &>> {{ log_file }}
+    cast code --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    echo "Balance after self destruct: " &>> {{ log_file }}
+    cast balance --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) &>> {{ log_file }}
+    # try to call it again even though it was just self destructed
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' selfdestroy.json) $(jq -r '.contractAddress' reverter.json) &>> {{ log_file }}
+    popd
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Finished EIP-6780 Test

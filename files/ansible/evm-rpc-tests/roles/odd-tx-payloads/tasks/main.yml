@@ -1,0 +1,89 @@
+---
+- name: Send a legacy transaction
+  ansible.builtin.shell: |
+    cast send --gas-price 100gwei --legacy --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 -j {{ eth_address }} "0x646174613a2c7b226d7367223a226c6567616379227d" >> {{ log_file }}
+  args:
+    executable: /bin/bash
+
+- name: Send an eip 1559 transaction
+  ansible.builtin.shell: |
+    cast send --gas-price 100gwei --private-key {{ private_key }} --rpc-url {{ rpc_url }} --gas-limit 100000 -j {{ eth_address }} "0x646174613a2c7b226d7367223a226569702d31353539227d" >> {{ log_file }}
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+
+- name: Send a blob transaction
+  ansible.builtin.shell: |
+    cast send --blob --blob-gas-price 100gwei --private-key {{ private_key }} --rpc-url {{ rpc_url }} --path site.yml $(cast az) >> {{ log_file }}
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+
+- name: Try an access list tx
+  ansible.builtin.shell: |
+    gas_limit="0xf4240"
+    base_fee="0x$((echo "obase=16"; cast base-fee --rpc-url {{ rpc_url }}) | bc)"
+    gas_price="0x$((echo "obase=16"; cast gas-price --rpc-url {{ rpc_url }}) | bc)"
+    nonce="0x$((echo "obase=16"; cast nonce {{ eth_address }} --rpc-url {{ rpc_url }}) | bc)"
+    chain_id="0x$((echo "obase=16"; cast chain-id --rpc-url {{ rpc_url }}) | bc)"
+    temp_file=$(mktemp -p {{ work_dir }} test-tx.XXXXXXXXXX.json)
+
+    echo '{
+      "from": "'{{ eth_address }}'",
+      "to": "0x0000000000000000000000000000000000000000",
+      "gas": "'$gas_limit'",
+      "chainId": "'$chain_id'",
+      "gasPrice": "'$gas_price'",
+      "nonce": "'$nonce'",
+      "value": "0x0",
+      "data": "0x",
+      "accessList": [
+        {"address": "0x0000000000000000000000000000000000000000", "storageKeys": [
+          "0x0000000000000000000000000000000000000000000000000000000000000000"
+        ]}
+      ]
+    }' | jq '.' > $temp_file
+
+    polycli signer sign --chain-id $chain_id --private-key {{ private_key }} --data-file $temp_file | jq '.' 2>> {{ log_file }} > $temp_file.signed
+    cast publish --rpc-url {{ rpc_url }} "$(jq -r '.rawSignedTx' $temp_file.signed)" | jq '.' &>> {{ log_file }}
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+
+- name: Try an access list tx
+  ansible.builtin.shell: |
+    gas_limit="0xf4240"
+    base_fee="0x$((echo "obase=16"; cast base-fee --rpc-url {{ rpc_url }}) | bc)"
+    gas_price="0x$((echo "obase=16"; cast gas-price --rpc-url {{ rpc_url }}) | bc)"
+    nonce="0x$((echo "obase=16"; cast nonce {{ eth_address }} --rpc-url {{ rpc_url }}) | bc)"
+    chain_id="0x$((echo "obase=16"; cast chain-id --rpc-url {{ rpc_url }}) | bc)"
+    temp_file=$(mktemp -p {{ work_dir }} test-tx.XXXXXXXXXX.json)
+
+    echo '{
+      "from": "'{{ eth_address }}'",
+      "to": "0x0000000000000000000000000000000000000000",
+      "gas": "'$gas_limit'",
+      "chainId": "'$chain_id'",
+      "gasPrice": "'$gas_price'",
+      "nonce": "'$nonce'",
+      "value": "0x0",
+      "data": "0x",
+      "accessList": [
+        {"address": "0x0000000000000000000000000000000000000000", "storageKeys": [
+          "0x0000000000000000000000000000000000000000000000000000000000000000"
+        ]}
+      ]
+    }' | jq '.' > $temp_file
+
+    polycli signer sign --chain-id $chain_id --private-key {{ private_key }} --data-file $temp_file | jq '.' 2>> {{ log_file }} > $temp_file.signed
+    cast publish --rpc-url {{ rpc_url }} "$(jq -r '.rawSignedTx' $temp_file.signed)" | jq '.' &>> {{ log_file }}
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Finished Odd Tx Payloads

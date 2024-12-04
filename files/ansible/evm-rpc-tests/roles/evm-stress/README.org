@@ -1,0 +1,23 @@
+The idea of this role is that we use all of the random test contracts
+that we have that aren't automated. There are a few that are left out
+because they're more specifc.
+
+- The prover killers are in a different role
+- ~gas-refund-sstore.lisp~ this one needs to be deliberately called twice with input
+- ~huge-contract.lisp~ because this is more for static input and will
+  cause issues depending on the max argument size of bash
+- ~return-variable-sized-contract.lisp~ redundant
+- ~selfdestruct-calldata-target.lisp~ tested in a different role
+- ~geth-test*~ are in a different role as well
+
+#+begin_src bash
+find files/ -maxdepth 1 -type f -name '*.deploy.bin' | xargs -I xxx basename xxx | sort > current-tests.txt
+find ~/code/jhilliard/evm-testing/out/ -maxdepth 1 -type f -name '*.deploy.bin' | xargs -I xxx basename xxx | sort > all-tests.txt
+diff -y current-tests.txt all-tests.txt
+#+end_src
+
+
+Some other features we should add:
+- LOG Weirdness with uneven sizes
+- A contract that will dynamically expand the code sized based on the
+  constructor

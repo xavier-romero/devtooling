@@ -1,0 +1,79 @@
+---
+- name: Copy the prover stress contracts
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ work_dir }}"
+  loop:
+    - loop-blake.deploy.bin
+    - ec-pairing.deploy.bin
+    - large-30m-sha3.deploy.bin
+    - large-identity.deploy.bin
+    - large-sha2.deploy.bin
+    - large-sha3.deploy.bin
+    - loop-log0.deploy.bin
+    - loop-sload.deploy.bin
+    - modexp-256-huge-precompile.deploy.bin
+    - modexp-slow-precompile.deploy.bin
+    - simple-fibonacci.deploy.bin
+    - simple-limit-fibonacci.deploy.bin
+    - loop-sload-to-gas-limit.deploy.bin
+
+- name: Deploying Contracts
+  ansible.builtin.shell: |
+    pushd {{ work_dir }} || exit 1
+    cur_nonce=$(cast nonce --rpc-url {{ rpc_url }} {{ eth_address }})
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat loop-blake.deploy.bin) > loop-blake.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat ec-pairing.deploy.bin) > ec-pairing.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat large-30m-sha3.deploy.bin) > large-30m-sha3.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat large-sha3.deploy.bin) > large-sha3.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat simple-fibonacci.deploy.bin) > simple-fibonacci.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat simple-limit-fibonacci.deploy.bin) > simple-limit-fibonacci.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat large-sha2.deploy.bin) > large-sha2.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat loop-sload.deploy.bin) > loop-sload.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat loop-log0.deploy.bin) > loop-log0.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat large-identity.deploy.bin) > large-identity.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat modexp-slow-precompile.deploy.bin) > modexp-slow-precompile.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat modexp-256-huge-precompile.deploy.bin) > modexp-256-huge-precompile.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+    cast send --async --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j --create $(cat loop-sload-to-gas-limit.deploy.bin) > loop-sload-to-gas-limit.deploy.bin.hash
+    cur_nonce=$((cur_nonce + 1))
+
+    cast send --nonce $cur_nonce {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} --value 1 {{ eth_address }}
+  args:
+    executable: /bin/bash
+
+- name: Executing the killers one by one
+  ansible.builtin.shell: |
+    pushd {{ work_dir }} || exit 1
+    find . -type f -name '*.hash' | sort | while read hashfile ; do
+        echo $hashfile >> {{ log_file }};
+        cast receipt -j --rpc-url {{ rpc_url }} $(cat $hashfile) | jq '.' > $hashfile.receipt
+        send_cmd="cast send --gas-limit {{ max_block_size }} {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} $(jq -r '.contractAddress' $hashfile.receipt)"
+        echo $send_cmd >> {{ log_file }}
+        timeout {{ cast_timeout }} $send_cmd &>> {{ log_file }}
+        ret_code=$?
+        if [[ $ret_code -ne 0 ]]; then
+            echo "the contract for $hashfile failed to execute due to a {{ cast_timeout }}s timeout" >> {{ log_file }}
+            continue
+        fi
+    done
+  args:
+    executable: /bin/bash
+
+- name: Add inscription to mark test end
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: clear_chain
+  vars:
+    inscription_message: Finished Prover Stress Tests

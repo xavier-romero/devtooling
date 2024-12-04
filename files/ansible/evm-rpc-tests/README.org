@@ -1,0 +1,73 @@
+This is some of the basic setup needed to create the Zero test chain
+
+#+begin_src bash
+# build the jerigon image (in a different repo)
+docker build -t erigon:local .
+
+# run kurtosis
+kurtosis run --enclave my-testnet github.com/ethpandaops/ethereum-package@4.3.0 --args-file network_params.yml
+
+# in order to speed things up we should fund a few addresses for testing besides the normal address
+rpc_url=http://$(kurtosis port print my-testnet2 el-1-geth-lighthouse rpc)
+private_key=0xbcdf20249abf0ed6d944c0288fad489e33f66b3960d9e6229c1cd214ed3bbe31
+
+# polycli wallet inspect --mnemonic 'code code code code code code code code code code code quality' | jq '.'
+# m/44'/60'/0'/0/1 - 0x0903a9a721167e2abaa0a33553cbeb209dc9300d28e4e4d6d2fac2452f93e357
+cast send --value 1000ether --private-key $private_key --rpc-url $rpc_url 0x125FB391bA829e0865963D3B91711610049a9e78
+# m/44'/60'/0'/0/2 - 0x6421222a9964cbe1b411191dcac1afda173ed99346c47302c6fe88f65d83583e
+cast send --value 1000ether --private-key $private_key --rpc-url $rpc_url 0x964ec59D0E05Db08440c822d7C588e63BBDE8c4e
+
+
+# Run the loads
+rm -rf /tmp/rpc-tests.* # clear logs
+ansible-playbook -i hosts site.yml
+
+# from the polycli directory
+./scripts/run-retest-with-cast.sh < simple-test-out-matrixed-w-block.json 2>&1 | tee -a local-test-sept9.logs
+#+end_src
+
+Notes:
+1-8XX - RPC Tests
+887-900 - Test setup
+977- ETH Tests
+
+
+* Start from a snapshot
+
+#+begin_src bash
+# create a temp directory to store these erigon files
+tdir=$(mktemp -d)
+
+# make note of the current location of our backup
+erigon_archive=$(readlink -f erigon.stopped.0.to.672.tar.gz)
+
+# move into the new directory
+pushd $tdir
+
+# extract our files
+tar xf $erigon_archive
+
+# go back
+popd
+
+# Run docker with a volume mounted at the teomporary location
+docker run -p 18545:8545 -v $tdir:/data -it jerrigon:latest --datadir=/data/erigon/execution-data --no-downloader=true --nodiscover=true --http.api=eth,erigon,engine,web3,net,debug,trace,txpool,admin --http.vhosts=* --ws --allow-insecure-unlock --http --http.addr=0.0.0.0 --http.corsdomain=* --http.port=8545  --metrics --metrics.addr=0.0.0.0 --metrics.port=9001 --db.size.limit=3000MB --txpool.disable=true --nat none
+
+# Grab a witness
+./rpc fetch --rpc-url http://127.0.0.1:18545 --start-block 5 --end-block 5
+#+end_src
+
+* TODO Ensure there are withdrawals and deposits
+* TODO Ensure there are some blobs
+* TODO Add the DELEGATECALL Loop as a role
+* TODO Fail / succeed to deploy to the same address randomly
+* TODO Add some test contracts for 0x0a - point evaluation
+* TODO Ensure we have 3 versions of most of the prover killers
+I think we had 3 versions.. One that does a big single, one that does small in a loop up to the gas limit and one that uses a known specific case that can cause DoS
+* TODO Add Binary Search to maximize type 2 counters
+* TODO Add more and a wider variety of fuzzed contracts
+* TODO Some kind of test of block hashes
+* TODO Call the coverage-sstore-overwrite-delete contract with an access list for slot 0
+* TODO 8 revert scenarios from yellow paper
+* TODO deploy the create2 on each chain if it's not there
+- https://github.com/Arachnid/deterministic-deployment-proxy

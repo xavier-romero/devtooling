@@ -1,0 +1,34 @@
+---
+
+- name: Sending multiple transactions until any nonce holes are cleared
+  ansible.builtin.shell: |
+    cur_nonce=1
+    last_nonce=0
+    while [[ $cur_nonce -ne $last_nonce ]] ; do
+        inscr_data=$(echo -n 'data:,{"msg":"{{ inscription_message }} - 1"}' | xxd -p | tr -d "\n")
+
+        gas_price=$(cast gas-price --rpc-url {{ rpc_url }})
+        gas_price=$(bc <<< "$gas_price * 2")
+        cast send {{ legacy_flag }} --gas-price $gas_price --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j {{ eth_address }} 0x$inscr_data >> {{ log_file }}
+
+        sleep {{ block_interval }}
+
+        cur_nonce=$(cast nonce --block pending --rpc-url {{ rpc_url }} {{ eth_address }})
+        last_nonce=$(cast nonce --rpc-url {{ rpc_url }} {{ eth_address }})
+
+        echo "Nonce: $last_nonce Pending Nonce: $cur_nonce" >> {{ log_file }}
+    done
+    gas_price=$(cast gas-price --rpc-url {{ rpc_url }})
+    gas_price=$(bc <<< "$gas_price * 10")
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j {{ eth_address }} >> {{ log_file }}
+  args:
+    executable: /bin/bash
+
+
+- name: Sending synchronous inscription with default nonce
+  ansible.builtin.shell: |
+    inscr_data=$(echo -n 'data:,{"msg":"{{ inscription_message }} - 2"}' | xxd -p | tr -d "\n")
+    cast send {{ legacy_flag }} --private-key {{ private_key }} --rpc-url {{ rpc_url }} -j {{ eth_address }} 0x$inscr_data >> {{ log_file }}
+  args:
+    executable: /bin/bash
+

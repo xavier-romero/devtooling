@@ -1,0 +1,37 @@
+---
+- name: Basic requirements checking
+  hosts: all
+  roles:
+    - requirements
+
+# - name: Post Shanghai
+#   hosts: all
+#   roles:
+#     - eip-1559
+#     - access-list-tx
+
+# - name: Standard EVM Tests
+#   hosts: all
+#   roles:
+#     - odd-tx-payloads
+#     - evm-stress
+#     - eip-6780
+#     - smoothcrypto
+#     - railgun
+#     - every-opcode
+#     - snowball
+#     - large-contracts
+#     - polycli-cases
+#     - geth-automated-tests
+#     - random-contracts
+#     - prover-stress # keep these toward the end
+#   vars:
+#      exponential_growth_limit: 4
+
+- name: Edge case tests
+  hosts: all
+  roles:
+    - regressions
+    # - deploy-and-call-immediately
+    # - pool-race-conditions
+    # - transfer-to-special-addresses

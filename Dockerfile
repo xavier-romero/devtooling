@@ -13,18 +13,25 @@ RUN git clone https://github.com/xavier-romero/eth-bench.git
 # FOUNDRY BUILDER
 FROM ubuntu:22.04 as foundry
 USER root
-RUN apt-get update && apt-get install -y curl git
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y curl git
 RUN curl -L https://foundry.paradigm.xyz | bash
 RUN /root/.foundry/bin/foundryup
 RUN cp /root/.foundry/bin/* /usr/local/bin/
+
+# JHILLIARD REPO
+FROM golang:1.23 as jhilliard
+WORKDIR /tmp
+RUN git clone https://github.com/0xPolygon/jhilliard
+
 
 # FINAL
 FROM ubuntu:22.04 as final
 USER root
 
-RUN apt-get update \
-    &&  apt-get install -y wget git build-essential cmake libboost-all-dev \
-        curl python3-pip socat git htop net-tools tcpdump vim gettext-base \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+    &&  DEBIAN_FRONTEND=noninteractive apt-get install -y wget git build-essential \
+        cmake libboost-all-dev curl python3-pip socat git htop net-tools tcpdump \
+        vim gettext-base ansible jq bc \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -60,6 +67,14 @@ COPY profiles.json.template /tools/profiles.json.template
 # scripts
 COPY --chmod=755 scripts/run-fuzzed.sh /scripts/run-fuzzed
 COPY --chmod=755 scripts/run-zktv.sh /scripts/run-zktv
+
+# Ansible related content
+COPY files/ansible /ansible
+RUN mkdir -p /etc/ansible && echo "localhost ansible_connection=local" > /etc/ansible/hosts
+
+# Save full repos, as they could be usefull
+COPY --from=ethtools /tmp/eth-bench /repos/eth-bench
+COPY --from=polycli /tmp/polygon-cli /repos/polygon-cli
 
 RUN echo 'PATH=$PATH:/tools:/scripts' >> /root/.bashrc
 # ENV PATH="$PATH:/tools:/scripts"

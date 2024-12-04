@@ -36,3 +36,16 @@ Run from this ```files``` folder:
 
     rm -f all-contracts.clean.bin
 
+## Ansible from https://github.com/0xPolygon/jhilliard
+
+Run from this ```files``` folder:
+
+    mkdir -p ansible
+    mkdir -p private_repos
+    git clone https://github.com/0xPolygon/jhilliard private_repos/jhilliard
+    rm -fr ansible/evm-rpc-tests
+    cp -fr private_repos/jhilliard/evm-rpc-tests ansible/
+
+Add this property to each play entry on the site.yml
+
+    connection: local

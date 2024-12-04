@@ -54,6 +54,22 @@ fi
 
 # Finalize /bin/x and then execute or sleep
 echo '$@' >> $WILDCARD_COMMAND
+
+# Set up Ansible all.yaml
+for d in /ansible/*; do
+    output_file=$d/group_vars/all.yml
+    echo "---" > $output_file
+    echo "rpc_url: $L2_RPC_URL" >> $output_file
+    echo "private_key: \"$L2_PRV_KEY\"" >> $output_file
+    echo "eth_address: \"$(cast wallet address --private-key $L2_PRV_KEY)\"" >> $output_file
+    echo "log_file: /ansible/evm-rpc-tests.log" >> $output_file
+    echo "work_dir: /ansible/evm-rpc-tests" >> $output_file
+    echo "max_block_size: 29_999_999" >> $output_file
+    echo "legacy_flag: \"--legacy\"" >> $output_file
+    echo "block_interval: 6" >> $output_file
+    echo "cast_timeout: 30" >> $output_file
+done
+
 # If no command has been provided, run sleep forever:
 if [ $# -eq 0 ]; then
     sleep infinity
