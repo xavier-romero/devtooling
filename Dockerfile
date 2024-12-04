@@ -15,7 +15,8 @@ FROM ubuntu:22.04 as foundry
 USER root
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y curl git
 RUN curl -L https://foundry.paradigm.xyz | bash
-RUN /root/.foundry/bin/foundryup
+# Nightly build taken on 2024/12/04
+RUN /root/.foundry/bin/foundryup --version nightly-805d7cee81e78e9163b8ce3d86a0c3beb39772d4
 RUN cp /root/.foundry/bin/* /usr/local/bin/
 
 
