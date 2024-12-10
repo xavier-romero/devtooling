@@ -24,10 +24,19 @@ RUN cp /root/.foundry/bin/* /usr/local/bin/
 FROM ubuntu:22.04 as final
 USER root
 
+# Needs to be done before adding Kurtoisis repo
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN echo "deb [trusted=yes] https://apt.fury.io/kurtosis-tech/ /" | tee /etc/apt/sources.list.d/kurtosis.list
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     &&  DEBIAN_FRONTEND=noninteractive apt-get install -y wget git build-essential \
         cmake libboost-all-dev curl python3-pip socat git htop net-tools tcpdump \
-        vim gettext-base ansible jq bc \
+        vim gettext-base ansible jq bc docker.io docker-buildx telnet \
+        kurtosis-cli=1.4.1 sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
