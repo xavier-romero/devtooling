@@ -2,12 +2,12 @@
 CAST_ACCOUNT_NAME=default
 CAST_KEYSTORE_PASSWORD=secret
 WILDCARD_COMMAND=/bin/x
-ETHTOOLS_PROFILES=/tools/profiles.json
-ETHTOOLS_PROFILES_TEMPLATE=/tools/profiles.json.template
+ETHTOOLS_PROFILES=/repos/eth-bench/profiles.json
+ETHTOOLS_PROFILES_TEMPLATE=/tmp/profiles.json.template
 
 # WILDCARD_COMMAND is a wrapper that will set all variables before executing passed command
 echo "#!/bin/bash" > $WILDCARD_COMMAND
-echo 'export PATH=$PATH:/tools:/scripts' >> $WILDCARD_COMMAND
+echo 'export PATH=$PATH:/scripts' >> $WILDCARD_COMMAND
 chmod +x $WILDCARD_COMMAND
 
 # Function to export and save env variables

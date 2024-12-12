@@ -7,8 +7,9 @@ RUN cd polygon-cli && make build
 # ETH TOOLS
 FROM golang:1.23 as ethtools
 WORKDIR /tmp
-RUN echo "Bump git 1"
+RUN echo "Bump git 10"
 RUN git clone https://github.com/xavier-romero/eth-bench.git
+RUN cd eth-bench && git submodule init && git submodule update
 
 # FOUNDRY BUILDER
 FROM ubuntu:22.04 as foundry
@@ -50,24 +51,10 @@ COPY --from=foundry /usr/local/bin/* /usr/local/bin/
 ADD files/FuzzEVMRunner /files/FuzzEVMRunner
 
 ## Eth Bench Tools
-# requirements
-COPY --from=ethtools /tmp/eth-bench/requirements.txt /tools/
-RUN pip3 install -r /tools/requirements.txt
-
-COPY --from=ethtools /tmp/eth-bench/utils.py /tools/
-COPY --from=ethtools /tmp/eth-bench/tx.py /tools/
-COPY --from=ethtools /tmp/eth-bench/geth.py /tools/
-COPY --from=ethtools /tmp/eth-bench/sc.py /tools/
-COPY --from=ethtools /tmp/eth-bench/wallets.py /tools/
-COPY --from=ethtools /tmp/eth-bench/bridge.py /tools/
+COPY --from=ethtools /tmp/eth-bench/requirements.txt /tmp/
+RUN pip3 install -r /tmp/requirements.txt && rm /tmp/requirements.txt
+COPY profiles.json.template /tmp/profiles.json.template
 COPY --from=ethtools /tmp/eth-bench/scripted /files/scripted
-COPY --from=ethtools /tmp/eth-bench/contracts /tools/contracts
-# tools
-COPY --from=ethtools /tmp/eth-bench/bench.py /tools/bench
-COPY --from=ethtools /tmp/eth-bench/tool_bridgespam.py /tools/bridgespam
-COPY --from=ethtools /tmp/eth-bench/tool_scripted.py /tools/scripted
-
-COPY profiles.json.template /tools/profiles.json.template
 
 # scripts
 COPY --chmod=755 scripts/run-fuzzed.sh /scripts/run-fuzzed
@@ -81,9 +68,22 @@ RUN mkdir -p /etc/ansible && echo "localhost ansible_connection=local" > /etc/an
 COPY --from=ethtools /tmp/eth-bench /repos/eth-bench
 COPY --from=polycli /tmp/polygon-cli /repos/polygon-cli
 
-RUN echo 'PATH=$PATH:/tools:/scripts' >> /root/.bashrc
-# ENV PATH="$PATH:/tools:/scripts"
+# Set some links for easier usage
+RUN ln -s /repos/eth-bench/bench.py /scripts/bench
+RUN ln -s /repos/eth-bench/tool_bridgespam.py /scripts/bridgespam
+RUN ln -s /repos/eth-bench/tool_scripted.py /scripts/scripted
+RUN ln -s /repos/eth-bench/tool_txspam.py /scripts/txspam
+RUN ln -s /repos/eth-bench/tool_txtest.py /scripts/txtest
+RUN ln -s /repos/eth-bench/tool_sc_chaos_monkey.py /scripts/sc_chaos
 
+# set path
+RUN echo 'PATH=$PATH:/scripts' >> /root/.bashrc
+
+# Create folder for some logs
+RUN mkdir -p /logs
+
+# Entrypoint
 ADD entrypoint.sh /entrypoint.sh
-WORKDIR /tools
+
+WORKDIR /scripts
 ENTRYPOINT [ "/entrypoint.sh" ]
