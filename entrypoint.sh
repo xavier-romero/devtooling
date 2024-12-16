@@ -18,17 +18,34 @@ function export_and_save {
     echo "export $1=$2" >> $WILDCARD_COMMAND
 }
 
-# Set default values for env variables
-L2_RPC_URL=${L2_RPC_URL:-http://localhost:8123}
-L2_PRV_KEY=${L2_PRV_KEY:-0}
-BRIDGE_URL=${BRIDGE_URL:-http://localhost:8080}
-BRIDGE_ADDR=${BRIDGE_ADDR:-0x}
-L1_RPC_URL=${L1_RPC_URL:-http://localhost:18123}
-L1_PRV_KEY=${L1_PRV_KEY:-1}
-L2_ROLLUP_ID=${L2_ROLLUP_ID:-1}
+if [ -n "$KURTOSIS_FORKID" ]; then
+    ENCLAVE=dt$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8; echo)
+    cd /repos/kurtosis-cdk-erigon
+    echo "Running Kurtosis stack enclave $ENCLAVE on fork $KURTOSIS_FORKID using Erigon image $KURTOSIS_ERIGON_IMAGE"
+    cat forkid${KURTOSIS_FORKID}.json | jq  '.erigon.image = "'$KURTOSIS_ERIGON_IMAGE'"' > params.json
+    kurtosis run --enclave $ENCLAVE . || exit 1
+
+    L2_RPC_URL=$(kurtosis port print $ENCLAVE rpc001 rpc8123 --cli-log-level error)
+    L2_PRV_KEY=0x42b6e34dc21598a807dc19d7784c71b2a7a01f6480dc6f58258f78e539f1a1fa
+    L2_ROLLUP_ID=1
+    L1_RPC_URL=http://$(kurtosis port print $ENCLAVE el-1-geth-lighthouse rpc --cli-log-level error)
+    L1_PRV_KEY=0x42b6e34dc21598a807dc19d7784c71b2a7a01f6480dc6f58258f78e539f1a1fa
+    BRIDGE_URL=$(kurtosis port print $ENCLAVE bridge001 bridge --cli-log-level error)
+    BRIDGE_ADDR=$(kurtosis service exec $ENCLAVE contracts001 "cat /output/deployment/deploy_output.json"  --cli-log-level error | tail -n +2 | jq -r .polygonZkEVMBridgeAddress)
+else
+    # Set default values for env variables
+    L2_RPC_URL=${L2_RPC_URL:-http://localhost:8123}
+    L2_PRV_KEY=${L2_PRV_KEY:-0}
+    BRIDGE_URL=${BRIDGE_URL:-http://localhost:8080}
+    BRIDGE_ADDR=${BRIDGE_ADDR:-0x}
+    L1_RPC_URL=${L1_RPC_URL:-http://localhost:18123}
+    L1_PRV_KEY=${L1_PRV_KEY:-1}
+    L2_ROLLUP_ID=${L2_ROLLUP_ID:-1}
+fi
 
 # Export and save env variables
 export_and_save L2_RPC_URL $L2_RPC_URL
+export_and_save L2_PRV_KEY $L2_PRV_KEY
 export_and_save ETH_RPC_URL $L2_RPC_URL # This is specific for cast to work
 export_and_save BRIDGE_URL $BRIDGE_URL
 export_and_save BRIDGE_ADDR $BRIDGE_ADDR

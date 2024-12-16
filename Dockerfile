@@ -20,6 +20,11 @@ RUN curl -L https://foundry.paradigm.xyz | bash
 RUN /root/.foundry/bin/foundryup --version nightly-805d7cee81e78e9163b8ce3d86a0c3beb39772d4
 RUN cp /root/.foundry/bin/* /usr/local/bin/
 
+# KURTOSIS STACK
+FROM golang:1.23 as kurtosis-stack
+WORKDIR /tmp
+RUN echo "Bump git 1"
+RUN git clone https://github.com/xavier-romero/kurtosis-cdk-erigon
 
 # FINAL
 FROM ubuntu:22.04 as final
@@ -64,9 +69,16 @@ COPY --chmod=755 scripts/run-zktv.sh /scripts/run-zktv
 COPY files/ansible /ansible
 RUN mkdir -p /etc/ansible && echo "localhost ansible_connection=local" > /etc/ansible/hosts
 
+# Avoid kurtosis asking for confirmation
+RUN mkdir -p /root/.config/kurtosis
+RUN echo "config-version: 2" > /root/.config/kurtosis/kurtosis-config.yml
+RUN echo "should-send-metrics: false" >> /root/.config/kurtosis/kurtosis-config.yml
+
 # Save full repos, as they could be usefull
 COPY --from=ethtools /tmp/eth-bench /repos/eth-bench
 COPY --from=polycli /tmp/polygon-cli /repos/polygon-cli
+COPY --from=kurtosis-stack /tmp/kurtosis-cdk-erigon /repos/kurtosis-cdk-erigon
+
 
 # Set some links for easier usage
 RUN ln -s /repos/eth-bench/bench.py /scripts/bench

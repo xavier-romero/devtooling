@@ -1,0 +1,38 @@
+name: Devtooling tests
+
+on:
+    push:
+      branches:
+        - 'main'
+  
+env:
+  DEVTOOLING_IMAGE: xavierromero/devtooling:20241216
+
+jobs:
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run devtooling
+        run: docker run --name devtooling --network host --detach --rm -v /var/run/docker.sock:/var/run/docker.sock -e KURTOSIS_FORKID=12 -e KURTOSIS_ERIGON_IMAGE=hermeznetwork/cdk-erigon:v2.61.0 ${{ env.DEVTOOLING_IMAGE }}
+
+      - name: Check Block Number
+        run: docker exec devtooling x cast bn
+
+      - name: Check Boundaries
+        run: docker exec devtooling x scripted -f /files/scripted/boundaries.json
+
+      - name: Check Block Number
+        run: docker exec devtooling x cast bn
+
+      - name: zkEVM Test Vectors
+        run: docker exec devtooling x run-zktv
+
+      - name: Check Block Number
+        run: docker exec devtooling x cast bn
+
+      - name: John fuzzed tests
+        run: docker exec devtooling x run-fuzzed
+
+      - name: Check Block Number
+        run: docker exec devtooling x cast bn
