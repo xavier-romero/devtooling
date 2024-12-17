@@ -6,6 +6,10 @@ inputs:
     description: "The Erigon image to use"
     required: true
     default: "hermeznetwork/cdk-erigon:v2.888.0"
+  enclave_name:
+    description: "The enclave name to use"
+    required: true
+    default: "cdk"
 runs:
   using: "composite"
   steps:
@@ -66,4 +70,4 @@ runs:
       working-directory: ./kurtosis-cdk
       shell: bash
       run: |
-        kurtosis run --enclave cdk-v1 --args-file params.yml --image-download always . '{"args": {"erigon_strict_mode": false, "cdk_erigon_node_image": "${{ inputs.erigon_image }}"}}'
+        kurtosis run --enclave ${{ inputs.enclave_name }} --args-file params.yml --image-download always . '{"args": {"erigon_strict_mode": false, "cdk_erigon_node_image": "${{ inputs.erigon_image }}"}}'

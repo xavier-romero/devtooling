@@ -8,6 +8,7 @@ on:
 env:
   DEVTOOLING_IMAGE: xavierromero/devtooling:20241217
   ERIGON_IMAGE: hermeznetwork/cdk-erigon:v2.61.0
+  KURTOSIS_ENCLAVE: cdk
 
 jobs:
 
@@ -22,23 +23,40 @@ jobs:
           uses: ./.github/actions/setup-kurtosis
           with:
             erigon_image: ${{ env.ERIGON_IMAGE }}
+            enclave_name: ${{ env.KURTOSIS_ENCLAVE }}
 
         - name: Set up env vars
           run: |
             echo "L2_PRV_KEY=0x12d7de8621a77640c9241b2595ba78ce443d05e94090365ab3bb5e19df82c625" >> $GITHUB_ENV
-            echo "L2_RPC_URL=$(kurtosis port print cdk-v1 cdk-erigon-rpc-001 rpc)" >> $GITHUB_ENV
+            echo "L2_RPC_URL=$(kurtosis port print ${{ env.KURTOSIS_ENCLAVE }} cdk-erigon-rpc-001 rpc --cli-log-level error)" >> $GITHUB_ENV
+            echo "L2_ROLLUP_ID=1" >> $GITHUB_ENV
+            echo "L1_RPC_URL=http://$(kurtosis port print ${{ env.KURTOSIS_ENCLAVE }} el-1-geth-lighthouse rpc --cli-log-level error)" >> $GITHUB_ENV
+            echo "L1_PRV_KEY=0x12d7de8621a77640c9241b2595ba78ce443d05e94090365ab3bb5e19df82c625" >> $GITHUB_ENV
+            echo "BRIDGE_URL=$(kurtosis port print ${{ env.KURTOSIS_ENCLAVE }} zkevm-bridge-service-001 rpc --cli-log-level error)" >> $GITHUB_ENV
+            echo "BRIDGE_ADDR=$(kurtosis service exec ${{ env.KURTOSIS_ENCLAVE }} contracts-001 "cat /opt/zkevm/combined.json | jq -r .polygonZkEVMBridgeAddress" --cli-log-level error | tail -n +2 | head -1)" >> $GITHUB_ENV
+            echo "CLAIMTX=$(kurtosis service exec ${{ env.KURTOSIS_ENCLAVE }} contracts-001 "cat /opt/zkevm/claimtxmanager.keystore | jq -r .address" --cli-log-level error | tail -n +2 | head -1)" >> $GITHUB_ENV
 
         - name: Run devtooling
-          run: docker run --name devtooling --network host --detach --rm -e L2_RPC_URL=$L2_RPC_URL -e L2_PRV_KEY=$L2_PRV_KEY ${{ env.DEVTOOLING_IMAGE }}
+          run: docker run --name devtooling --network host --detach --rm
+            -e L2_RPC_URL=$L2_RPC_URL -e L2_PRV_KEY=$L2_PRV_KEY
+            -e L2_ROLLUP_ID=$L2_ROLLUP_ID -e L1_RPC_URL=$L1_RPC_URL
+            -e L1_PRV_KEY=$L1_PRV_KEY -e BRIDGE_URL=$BRIDGE_URL
+            -e BRIDGE_ADDR=$BRIDGE_ADDR ${{ env.DEVTOOLING_IMAGE }}
 
         - name: Check Block Number
           run: docker exec devtooling x cast bn
 
         - name: TMP Check Folder
-          run: docker exec devtooling x ls /files
-
-        - name: TMP Check Folder 2
           run: docker exec devtooling x ls /files/scripted
+
+        - name: Just 1 EOA tx
+          run: docker exec devtooling x txtest
+
+        - name: Fund Claim tx manager
+          run: docker exec devtooling x cast send --legacy --value 1ether $CLAIMTX
+
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
 
         - name: Check Boundaries
           run: docker exec devtooling x scripted -f /files/scripted/boundaries.json
@@ -72,6 +90,18 @@ jobs:
 
         - name: John fuzzed tests
           run: docker exec devtooling x run-fuzzed
+
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
+
+        - name: Bridge to L2
+          run: docker exec devtooling x bench --bridge2l2
+
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
+
+        - name: Bridge to L1
+          run: docker exec devtooling x bench --bridge2l1
 
         - name: Check Block Number
           run: docker exec devtooling x cast bn
