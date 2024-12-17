@@ -6,7 +6,7 @@ on:
         - 'main'
   
 env:
-  DEVTOOLING_IMAGE: xavierromero/devtooling:20241216
+  DEVTOOLING_IMAGE: xavierromero/devtooling:20241217
 
 jobs:
 
@@ -14,7 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run devtooling
-        run: docker run --name devtooling --network host --detach --rm -v /var/run/docker.sock:/var/run/docker.sock -e KURTOSIS_FORKID=12 -e KURTOSIS_ERIGON_IMAGE=hermeznetwork/cdk-erigon:v2.61.0 ${{ env.DEVTOOLING_IMAGE }}
+        run: docker run --name devtooling --network host --rm -v /var/run/docker.sock:/var/run/docker.sock -e KURTOSIS_FORKID=12 -e KURTOSIS_ERIGON_IMAGE=hermeznetwork/cdk-erigon:v2.61.0 ${{ env.DEVTOOLING_IMAGE }}
+
+      - name: Wait for L2 RPC
+        run: docker exec devtooling x wait-rpc
 
       - name: Check Block Number
         run: docker exec devtooling x cast bn

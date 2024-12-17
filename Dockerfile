@@ -64,6 +64,7 @@ COPY --from=ethtools /tmp/eth-bench/scripted /files/scripted
 # scripts
 COPY --chmod=755 scripts/run-fuzzed.sh /scripts/run-fuzzed
 COPY --chmod=755 scripts/run-zktv.sh /scripts/run-zktv
+COPY --chmod=755 scripts/wait-rpc.sh /scripts/wait-rpc
 
 # Ansible related content
 COPY files/ansible /ansible
@@ -99,3 +100,4 @@ ADD entrypoint.sh /entrypoint.sh
 
 WORKDIR /scripts
 ENTRYPOINT [ "/entrypoint.sh" ]
+
