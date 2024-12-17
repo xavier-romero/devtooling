@@ -13,29 +13,38 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Run devtooling
-        run: docker run --name devtooling --network host --rm -v /var/run/docker.sock:/var/run/docker.sock -e KURTOSIS_FORKID=12 -e KURTOSIS_ERIGON_IMAGE=hermeznetwork/cdk-erigon:v2.61.0 ${{ env.DEVTOOLING_IMAGE }}
 
-      - name: Wait for L2 RPC
-        run: docker exec devtooling x wait-rpc
+        - name: Checkout
+          uses: actions/checkout@v4
 
-      - name: Check Block Number
-        run: docker exec devtooling x cast bn
+        - name: Setup kurtosis
+          uses: ./.github/actions/setup-kurtosis
 
-      - name: Check Boundaries
-        run: docker exec devtooling x scripted -f /files/scripted/boundaries.json
+        - name: Set up env vars
+          run: |
+            echo "L2_PRV_KEY=0x12d7de8621a77640c9241b2595ba78ce443d05e94090365ab3bb5e19df82c625" >> $GITHUB_ENV
+            echo "L2_RPC_URL=$(kurtosis port print cdk-v1 cdk-erigon-rpc-001 rpc)" >> $GITHUB_ENV
 
-      - name: Check Block Number
-        run: docker exec devtooling x cast bn
+        - name: Run devtooling
+          run: docker run --name devtooling --network host --detach --rm -e L2_RPC_URL=$L2_RPC_URL -e L2_PRV_KEY=$L2_PRV_KEY ${{ env.DEVTOOLING_IMAGE }}
 
-      - name: zkEVM Test Vectors
-        run: docker exec devtooling x run-zktv
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
 
-      - name: Check Block Number
-        run: docker exec devtooling x cast bn
+        - name: Check Boundaries
+          run: docker exec devtooling x scripted -f /files/scripted/boundaries.json
 
-      - name: John fuzzed tests
-        run: docker exec devtooling x run-fuzzed
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
 
-      - name: Check Block Number
-        run: docker exec devtooling x cast bn
+        - name: zkEVM Test Vectors
+          run: docker exec devtooling x run-zktv
+
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
+
+        - name: John fuzzed tests
+          run: docker exec devtooling x run-fuzzed
+
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
