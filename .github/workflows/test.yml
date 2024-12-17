@@ -34,8 +34,32 @@ jobs:
         - name: Check Block Number
           run: docker exec devtooling x cast bn
 
+        - name: TMP Check Folder
+          run: docker exec devtooling x ls /files
+
+        - name: TMP Check Folder 2
+          run: docker exec devtooling x ls /files/scripted
+
         - name: Check Boundaries
           run: docker exec devtooling x scripted -f /files/scripted/boundaries.json
+
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
+
+        - name: Check past issues
+          run: docker exec devtooling x scripted -f /files/scripted/scripted.json
+
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
+
+        - name: Check tx calls
+          run: docker exec devtooling x scripted -f /files/scripted/scripted-calling.json
+
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
+
+        - name: Check identity precompileds
+          run: docker exec devtooling x scripted -f /files/scripted/scripted-identity_precompiled.json
 
         - name: Check Block Number
           run: docker exec devtooling x cast bn
