@@ -1,0 +1,31 @@
+# PRV_KEY for master sender 0x831b4C5d280B3D171296eD90a5C88e98CD3302D5
+PRV_KEY=cdc0f6eda513fd67c392bc1ffd3b2e085ff6fe1a9eafbbeea2005d1c474d663e
+GAS_PRICE=$(cast gas-price --rpc-url $RPC_URL)
+
+echo "Test testOpcode_1a (src/BlockchainTestsFiller/ValidBlocks/bcStateTests/testOpcode_10Filler.yml)"
+
+AMOUNT=$((2*150000*1*$GAS_PRICE+0))
+echo "[testOpcode_1a] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xD64FcBEaB59ea577dEE027989b76C5575dF95F01) with $AMOUNT"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0xD64FcBEaB59ea577dEE027989b76C5575dF95F01 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[testOpcode_1a] Creating receiver 0x00000000000000000000000000000000000000ff with code and balance 153..."
+ADDR_00000000000000000000000000000000000000FF=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 153 --create 6300000003601260003963000000036000F36000FF | jq -r .contractAddress)
+echo $ADDR_00000000000000000000000000000000000000FF
+
+echo "[testOpcode_1a] Creating receiver 0x7e57c0de0000000000000000000000000000001a with code and balance 72057594037927936..."
+ADDR_7E57C0DE0000000000000000000000000000001A=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 72057594037927936 --create 630000000e6012600039630000000e6000F360ff601f1a60ff14600C57FD5B00 | jq -r .contractAddress)
+echo $ADDR_7E57C0DE0000000000000000000000000000001A
+
+echo "[testOpcode_1a] Creating receiver 0xb1607e5700000000000000000000000000000000 with code and balance 72057594037927936..."
+ADDR_B1607E5700000000000000000000000000000000=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 72057594037927936 --create 6300000032601260003963000000326000F360ba601e5360d0601f5360006000602060006000737e57c0de0000000000000000000000000000001a62989680f1601a5500 | jq -r .contractAddress)
+echo $ADDR_B1607E5700000000000000000000000000000000
+
+echo "[testOpcode_1a] Creating receiver 0xca11ed0000000000000000000000000000000000 with code and balance 72057594037927936..."
+ADDR_CA11ED0000000000000000000000000000000000=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 72057594037927936 --create 6300000020601260003963000000206000F360de60105360ad60115360be60125360ef601353610dad610dad5560046010F3 | jq -r .contractAddress)
+echo $ADDR_CA11ED0000000000000000000000000000000000
+
+echo "[testOpcode_1a] Processing transaction number 1558 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xD64FcBEaB59ea577dEE027989b76C5575dF95F01) to 0xb1607e5700000000000000000000000000000000"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key e0700efa0bf2475fc94d59b30aa4b2a90072503c815bb5f21121e228f62a210e --timeout 20 --value 0 $ADDR_B1607E5700000000000000000000000000000000 0xFF | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+

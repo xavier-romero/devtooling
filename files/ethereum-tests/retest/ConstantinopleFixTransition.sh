@@ -1,0 +1,131 @@
+# PRV_KEY for master sender 0x080C7F12808cF2348757fa7c41554223c1f1e4a1
+PRV_KEY=c94d1bda3109dec948991fd2648ca6e749cc4efc4a230f7504414cb2f359c652
+GAS_PRICE=$(cast gas-price --rpc-url $RPC_URL)
+
+echo "Test ConstantinopleFixTransition (src/BlockchainTestsFiller/TransitionTests/bcByzantiumToConstantinopleFix/ConstantinopleFixTransitionFiller.json)"
+
+AMOUNT=$((2*150000*27*$GAS_PRICE+16))
+echo "[ConstantinopleFixTransition] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) with $AMOUNT"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Creating receiver 0x1000000000000000000000000000000000000001 with code and balance 0..."
+ADDR_1000000000000000000000000000000000000001=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 0 --create 6300000006601260003963000000066000F3446000355500 | jq -r .contractAddress)
+echo $ADDR_1000000000000000000000000000000000000001
+
+echo "[ConstantinopleFixTransition] Creating receiver 0x1000000000000000000000000000000000000002 with code and balance 9..."
+ADDR_1000000000000000000000000000000000000002=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 9 --create 630000000b6012600039630000000b6000F360003f6000526001435500 | jq -r .contractAddress)
+echo $ADDR_1000000000000000000000000000000000000002
+
+echo "[ConstantinopleFixTransition] Creating receiver 0x1000000000000000000000000000000000000003 with code and balance 9..."
+ADDR_1000000000000000000000000000000000000003=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 9 --create 60ff610100556300000018601860003963000000186000F35a60005260ff610100555a60205260205160005103435500 | jq -r .contractAddress)
+echo $ADDR_1000000000000000000000000000000000000003
+
+echo "[ConstantinopleFixTransition] Processing transaction number 882 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000001"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 1 $ADDR_1000000000000000000000000000000000000001 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 883 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000002"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000002 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 884 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000003"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000003 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 885 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000001"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 1 $ADDR_1000000000000000000000000000000000000001 0x0000000000000000000000000000000000000000000000000000000000000002 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 886 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000002"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000002 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 887 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000003"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000003 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 888 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000001"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 1 $ADDR_1000000000000000000000000000000000000001 0x0000000000000000000000000000000000000000000000000000000000000003 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 889 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000002"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000002 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 890 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000003"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000003 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 891 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000001"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 1 $ADDR_1000000000000000000000000000000000000001 0x0000000000000000000000000000000000000000000000000000000000000004 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 892 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000002"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 7 $ADDR_1000000000000000000000000000000000000002 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 893 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000003"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000003 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 894 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000001"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 1 $ADDR_1000000000000000000000000000000000000001 0x0000000000000000000000000000000000000000000000000000000000000005 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 895 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000002"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000002 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 896 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000003"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000003 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 897 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000001"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 1 $ADDR_1000000000000000000000000000000000000001 0x0000000000000000000000000000000000000000000000000000000000000006 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 898 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000002"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000002 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 899 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000003"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000003 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 900 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000001"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 1 $ADDR_1000000000000000000000000000000000000001 0x0000000000000000000000000000000000000000000000000000000000000007 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 901 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000002"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000002 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 902 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000003"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000003 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 903 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000001"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 1 $ADDR_1000000000000000000000000000000000000001 0x0000000000000000000000000000000000000000000000000000000000000008 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 904 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000002"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000002 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 905 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000003"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000003 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 906 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000001"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 1 $ADDR_1000000000000000000000000000000000000001 0x0000000000000000000000000000000000000000000000000000000000000009 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 907 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000002"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000002 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+
+echo "[ConstantinopleFixTransition] Processing transaction number 908 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xf4A9BF31aFF67c9Db2A09E14D630ff3428670aFe) to 0x1000000000000000000000000000000000000003"...
+STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 2786967fbdcf1bd8668d89e932ae37ff1052f3715b63a6ef3f909d22706f1e12 --timeout 20 --value 0 $ADDR_1000000000000000000000000000000000000003 0x0000000000000000000000000000000000000000000000000000000000000001 | jq -r .status)
+if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
+

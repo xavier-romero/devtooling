@@ -54,6 +54,9 @@ ADD files/polycli-retest-20241203.json /files/polycli-retest.json
 COPY --from=foundry /usr/local/bin/* /usr/local/bin/
 # go-ethereum fuzzed
 ADD files/FuzzEVMRunner /files/FuzzEVMRunner
+# ethereum tests (retest)
+ADD files/ethereum-tests/retest /files/retest
+COPY --chmod=755 files/ethereum-tests/retest.sh /files/retest.sh
 
 ## Eth Bench Tools
 COPY --from=ethtools /tmp/eth-bench/requirements.txt /tmp/
@@ -65,6 +68,7 @@ COPY --from=ethtools /tmp/eth-bench/scripted /files/scripted
 COPY --chmod=755 scripts/run-fuzzed.sh /scripts/run-fuzzed
 COPY --chmod=755 scripts/run-zktv.sh /scripts/run-zktv
 COPY --chmod=755 scripts/wait-rpc.sh /scripts/wait-rpc
+COPY --chmod=755 scripts/run-retests.sh /scripts/run-retests
 
 # Ansible related content
 COPY files/ansible /ansible

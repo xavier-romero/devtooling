@@ -45,3 +45,11 @@ Run from this ```files``` folder:
     (cd private_repos/jhilliard && git pull) || (git clone https://github.com/0xPolygon/jhilliard private_repos/jhilliard)
     rm -fr ansible/evm-rpc-tests
     cp -fr private_repos/jhilliard/evm-rpc-tests ansible/
+
+
+## Ethereum tests
+Inside ethereum-tests repo (not included here), run the python script:
+
+    python3 create_json_tests.py retest
+
+This will generate the retest.sh script and retest folder used here.

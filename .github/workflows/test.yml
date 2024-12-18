@@ -25,7 +25,7 @@ on:
                     - "cdk-validium"
 
 env:
-  DEVTOOLING_IMAGE: xavierromero/devtooling:20241217
+  DEVTOOLING_IMAGE: xavierromero/devtooling:20241218
   ERIGON_IMAGE: ${{ github.event.inputs.erigon_image }}
   FORKID: ${{ github.event.inputs.forkid }}
   CONSENSUS: ${{ github.event.inputs.consensus_contract_type }}
@@ -78,6 +78,12 @@ jobs:
 
         - name: Fund Claim tx manager
           run: docker exec devtooling x cast send --legacy --value 1ether $CLAIMTX
+
+        - name: Check Block Number
+          run: docker exec devtooling x cast bn
+
+        - name: Run retests
+          run: docker exec devtooling x run-retests
 
         - name: Check Block Number
           run: docker exec devtooling x cast bn
