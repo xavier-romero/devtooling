@@ -1,0 +1,13 @@
+{
+    "profiles": {
+        "default": {
+            "node_url": "$L2_RPC_URL",
+            "funded_key": "$L2_PRV_KEY",
+            "bridge_ep": "$BRIDGE_URL",
+            "bridge_addr": "$BRIDGE_ADDR",
+            "rollup_id": "$L2_ROLLUP_ID",
+            "l1_ep": "$L1_RPC_URL",
+            "l1_funded_key": "$L1_PRV_KEY"
+        }
+    }
+}

@@ -58,7 +58,7 @@ ADD files/FuzzEVMRunner /files/FuzzEVMRunner
 ## Eth Bench Tools
 COPY --from=ethtools /tmp/eth-bench/requirements.txt /tmp/
 RUN pip3 install -r /tmp/requirements.txt && rm /tmp/requirements.txt
-COPY profiles.json.template /tmp/profiles.json.template
+COPY templates/profiles.json.template /tmp/profiles.json.template
 COPY --from=ethtools /tmp/eth-bench/scripted /files/scripted
 
 # scripts
