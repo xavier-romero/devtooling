@@ -43,6 +43,10 @@ jobs:
             -e L1_PRV_KEY=$L1_PRV_KEY -e BRIDGE_URL=$BRIDGE_URL
             -e BRIDGE_ADDR=$BRIDGE_ADDR ${{ env.DEVTOOLING_IMAGE }}
 
+        # I get no output by running commands on the container immediately, so I introduce a delay
+        - name: Sleep 10 seconds
+          run: sleep 10
+  
         - name: Check Block Number
           run: docker exec devtooling x cast bn
 
