@@ -4,10 +4,25 @@ on:
     workflow_dispatch:
         inputs:
             erigon_image:
-                description: "The Erigon image to use"
+                type: string
+                description: "Erigon image to use"
                 required: true
                 default: "hermeznetwork/cdk-erigon:v2.61.0"
-
+            forkid:
+                type: choice
+                description: "Fork ID to use"
+                required: true
+                options:
+                    - 11
+                    - 12
+                    - 13
+            consensus_contract_type:
+                type: choice
+                description: "Consensus contract type to use"
+                required: true
+                options:
+                    - "rollup"
+                    - "cdk-validium"
 
 env:
   DEVTOOLING_IMAGE: xavierromero/devtooling:20241217
