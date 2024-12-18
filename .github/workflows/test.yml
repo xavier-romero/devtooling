@@ -129,3 +129,6 @@ jobs:
 
         - name: Check Block Number
           run: docker exec devtooling x cast bn
+
+        - name: Just 1 EOA tx
+          run: docker exec devtooling x txtest
