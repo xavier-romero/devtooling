@@ -73,9 +73,6 @@ jobs:
         - name: Check Block Number
           run: docker exec devtooling x cast bn
 
-        - name: TMP Check Folder
-          run: docker exec devtooling x ls /files/scripted
-
         - name: Just 1 EOA tx
           run: docker exec devtooling x txtest
 
