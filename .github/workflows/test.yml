@@ -1,17 +1,21 @@
-name: Devtooling tests
+name: Run tests
 
 on:
-    push:
-      branches:
-        - 'main'
-  
+    workflow_dispatch:
+        inputs:
+            erigon_image:
+                description: "The Erigon image to use"
+                required: true
+                default: "hermeznetwork/cdk-erigon:v2.61.0"
+
+
 env:
   DEVTOOLING_IMAGE: xavierromero/devtooling:20241217
-  ERIGON_IMAGE: hermeznetwork/cdk-erigon:v2.61.0
+  ERIGON_IMAGE: ${{ github.event.inputs.erigon_image }}
   KURTOSIS_ENCLAVE: cdk
 
-jobs:
 
+jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
