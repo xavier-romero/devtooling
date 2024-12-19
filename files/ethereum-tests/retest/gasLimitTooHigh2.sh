@@ -1,27 +1,27 @@
-# PRV_KEY for master sender 0x13dee60CbD5588737CE5f3Dea8a4B3dCE4c0FD65
-PRV_KEY=1011ed4679b73a3e08c2b278a09890d3708e3a4ff3df16e04828b8ea64b2e4e6
+# PRV_KEY for master sender 0xcf6609f83d0110BF1d0274ba5e9b877Ca91FcbE6
+PRV_KEY=74cc0caa720cca1637a148e75a1c4ccd5d0e048150c3ced5e907a882a45b4bfc
 GAS_PRICE=$(cast gas-price --rpc-url $RPC_URL)
 
 echo "Test gasLimitTooHigh2 (src/BlockchainTestsFiller/ValidBlocks/bcValidBlockTest/gasLimitTooHigh2Filler.json)"
 
 AMOUNT=$((2*150000*4*$GAS_PRICE+40))
-echo "[gasLimitTooHigh2] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x919992Dd516c0415EF072e329CEae3b34e103B5f) with $AMOUNT"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0x919992Dd516c0415EF072e329CEae3b34e103B5f | jq -r .status)
+echo "[gasLimitTooHigh2] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x52EaB43cd04c29B9EcFe56DA4719Dd8E024eB33A) with $AMOUNT"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0x52EaB43cd04c29B9EcFe56DA4719Dd8E024eB33A | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 
-echo "[gasLimitTooHigh2] Processing transaction number 699 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x919992Dd516c0415EF072e329CEae3b34e103B5f) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 77f1b0bc07d2799c298f8123154c6213754c1b6ff2bc8544c051ff99df256180 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
+echo "[gasLimitTooHigh2] Processing transaction number 699 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x52EaB43cd04c29B9EcFe56DA4719Dd8E024eB33A) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key dcd13a2080a32c4c41a1f81f2935657bf9d73c7b4640f645e307a702c513dec7 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 
-echo "[gasLimitTooHigh2] Processing transaction number 700 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x919992Dd516c0415EF072e329CEae3b34e103B5f) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 77f1b0bc07d2799c298f8123154c6213754c1b6ff2bc8544c051ff99df256180 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
+echo "[gasLimitTooHigh2] Processing transaction number 700 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x52EaB43cd04c29B9EcFe56DA4719Dd8E024eB33A) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key dcd13a2080a32c4c41a1f81f2935657bf9d73c7b4640f645e307a702c513dec7 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 
-echo "[gasLimitTooHigh2] Processing transaction number 701 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x919992Dd516c0415EF072e329CEae3b34e103B5f) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 77f1b0bc07d2799c298f8123154c6213754c1b6ff2bc8544c051ff99df256180 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
+echo "[gasLimitTooHigh2] Processing transaction number 701 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x52EaB43cd04c29B9EcFe56DA4719Dd8E024eB33A) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key dcd13a2080a32c4c41a1f81f2935657bf9d73c7b4640f645e307a702c513dec7 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 
-echo "[gasLimitTooHigh2] Processing transaction number 702 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x919992Dd516c0415EF072e329CEae3b34e103B5f) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 77f1b0bc07d2799c298f8123154c6213754c1b6ff2bc8544c051ff99df256180 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
+echo "[gasLimitTooHigh2] Processing transaction number 702 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x52EaB43cd04c29B9EcFe56DA4719Dd8E024eB33A) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key dcd13a2080a32c4c41a1f81f2935657bf9d73c7b4640f645e307a702c513dec7 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 

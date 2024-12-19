@@ -1,5 +1,5 @@
-# PRV_KEY for master sender 0xa221E834eaE3aaaCEAF74603A7142e6b1654335E
-PRV_KEY=37e5b989e3ab87657b53160c0648102690a330c45825d65f1b960c4de32a839b
+# PRV_KEY for master sender 0x0e85bb4964b55ac9E3D02D77DCcD54fB835C127a
+PRV_KEY=3fd0d91f108e430913f7beac3e8b68c6ebbabf84eb045e4d0c6955c0e5c12168
 GAS_PRICE=$(cast gas-price --rpc-url $RPC_URL)
 
 echo "Test lastblockhashException_Istanbul (src/BlockchainTestsFiller/InvalidBlocks/bcExpectSection/lastblockhashExceptionCopier.json)"

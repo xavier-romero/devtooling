@@ -1,23 +1,23 @@
-# PRV_KEY for master sender 0xfD7798a897bb9d5F5981702e50286a1138bfBdfc
-PRV_KEY=4f694b07c033e9223cf1b98924752db8b4d0979ee392b40a613b68924c8bc87b
+# PRV_KEY for master sender 0xd7B89E2C6CD6BBf5F9eecca56f771c6844bF070A
+PRV_KEY=d496c22aad80a8d3832868c920d26add945291c488a87388ac575024505c47b4
 GAS_PRICE=$(cast gas-price --rpc-url $RPC_URL)
 
 echo "Test twoUncle (src/BlockchainTestsFiller/InvalidBlocks/bcUncleTest/twoUncleFiller.json)"
 
 AMOUNT=$((2*150000*3*$GAS_PRICE+30))
-echo "[twoUncle] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x83D1342dF4e7044c361632702f315299dE6a27d6) with $AMOUNT"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0x83D1342dF4e7044c361632702f315299dE6a27d6 | jq -r .status)
+echo "[twoUncle] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x29249Cf169C8c335C64EE6b51F6D35A947e2192c) with $AMOUNT"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0x29249Cf169C8c335C64EE6b51F6D35A947e2192c | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 
-echo "[twoUncle] Processing transaction number 249 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x83D1342dF4e7044c361632702f315299dE6a27d6) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key dcaddffa69cefcf681454f30d3f142a24a512791333119d4bccf1144fc5407a1 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
+echo "[twoUncle] Processing transaction number 249 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x29249Cf169C8c335C64EE6b51F6D35A947e2192c) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key 7e6aed9fc37fca501e9ae5739cb40c60f4521641204b412758b988225abff602 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 
-echo "[twoUncle] Processing transaction number 250 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x83D1342dF4e7044c361632702f315299dE6a27d6) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key dcaddffa69cefcf681454f30d3f142a24a512791333119d4bccf1144fc5407a1 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
+echo "[twoUncle] Processing transaction number 250 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x29249Cf169C8c335C64EE6b51F6D35A947e2192c) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key 7e6aed9fc37fca501e9ae5739cb40c60f4521641204b412758b988225abff602 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 
-echo "[twoUncle] Processing transaction number 251 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x83D1342dF4e7044c361632702f315299dE6a27d6) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key dcaddffa69cefcf681454f30d3f142a24a512791333119d4bccf1144fc5407a1 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
+echo "[twoUncle] Processing transaction number 251 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x29249Cf169C8c335C64EE6b51F6D35A947e2192c) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key 7e6aed9fc37fca501e9ae5739cb40c60f4521641204b412758b988225abff602 --timeout 20 --value 10 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 

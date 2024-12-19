@@ -1,15 +1,15 @@
-# PRV_KEY for master sender 0xEf3AFA9E4D7Dd79F07cdb443d523f400B74FD1D3
-PRV_KEY=099dfa5c4fb110b1731b0afaa69b06355ce8984dc058321d3191e2a61340ff2b
+# PRV_KEY for master sender 0x897E11e9d9AfCa5360446E4ea06bC7DCD1E8D7d1
+PRV_KEY=50464fefaadb69fcfe3c7b87a0ce4db6f6e1d7f5a6dfda61f6c7f3ef74af4ef4
 GAS_PRICE=$(cast gas-price --rpc-url $RPC_URL)
 
 echo "Test createRevert (src/BlockchainTestsFiller/InvalidBlocks/bcStateTests/createRevertFiller.json)"
 
 AMOUNT=$((2*150000*1*$GAS_PRICE+10))
-echo "[createRevert] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x3c800f5a0Bd61CAff81C68871f92adff981d3398) with $AMOUNT"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0x3c800f5a0Bd61CAff81C68871f92adff981d3398 | jq -r .status)
+echo "[createRevert] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x3bE7a4d1190b2910DB52BCcB97110545e9572f70) with $AMOUNT"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0x3bE7a4d1190b2910DB52BCcB97110545e9572f70 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 
-echo "[createRevert] Processing transaction number 124 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x3c800f5a0Bd61CAff81C68871f92adff981d3398) to None"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key af8128cb92134bf45fb9a175a18b49777b56cd236abce7e07a2d8921b0aaace0 --timeout 20 --value 10 --create 0x60006000fd | jq -r .status)
+echo "[createRevert] Processing transaction number 124 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x3bE7a4d1190b2910DB52BCcB97110545e9572f70) to None"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key 4dd3a5308666d1ad96cd090ea85877b8003e803e9f20aeeb277b6040274ec119 --timeout 20 --value 10 --create 0x60006000fd | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 

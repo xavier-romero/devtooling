@@ -1,5 +1,5 @@
-# PRV_KEY for master sender 0x335E8Ab27D1C929155F6E0c62e228cBC7A97dcA1
-PRV_KEY=4ae553e593f4d4a1b78db85b4445ea2c50db934ec4da8e6f26a0f0e5c9d89a83
+# PRV_KEY for master sender 0x496c936DBe1c263FaD8Ae1F3DD4680AAE57B4BB1
+PRV_KEY=06878f52549f24b86d8012e6e99d947ab2af06a0765b70a7aea5548fa0b255fc
 GAS_PRICE=$(cast gas-price --rpc-url $RPC_URL)
 
 echo "Test wrongAccount_Istanbul (src/BlockchainTestsFiller/InvalidBlocks/bcExpectSection/wrongAccountCopier.json)"

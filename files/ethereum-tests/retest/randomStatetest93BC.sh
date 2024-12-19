@@ -1,27 +1,27 @@
-# PRV_KEY for master sender 0x8ecd31a147D18ce218F21D816A497979757c3Da2
-PRV_KEY=27674f51126c8131103019201f5e27446ba5de47ee4558ec45d63bcaa538e557
+# PRV_KEY for master sender 0x75d0b7a3d5Ed6EDCb764B053767E908A322B3D7a
+PRV_KEY=e2244c4fa3f4be799e53f3cb024415bbc9bca69f40eed3460fa6fe0b6fc72679
 GAS_PRICE=$(cast gas-price --rpc-url $RPC_URL)
 
 echo "Test randomStatetest93BC (src/BlockchainTestsFiller/ValidBlocks/bcRandomBlockhashTest/randomStatetest93BCFiller.json)"
 
 AMOUNT=$((2*150000*1*$GAS_PRICE+100000))
-echo "[randomStatetest93BC] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x78cf0387F1d6C0B4855025B65D0dDCFA3462f4DB) with $AMOUNT"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0x78cf0387F1d6C0B4855025B65D0dDCFA3462f4DB | jq -r .status)
+echo "[randomStatetest93BC] Funding sender 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xabeE73809aA202a5878B17A81C49A5982649Ac36) with $AMOUNT"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT 0xabeE73809aA202a5878B17A81C49A5982649Ac36 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 
 echo "[randomStatetest93BC] Creating receiver 0x000f3df6d732807ef1319fb7b8bb8522d0beac02 with code and balance 0..."
-ADDR_000F3DF6D732807EF1319FB7B8BB8522D0BEAC02=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 0 --create 6103b66103b6556103e86103e85561079e61079e556300000061602760003963000000616000F33373fffffffffffffffffffffffffffffffffffffffe14604d57602036146024575f5ffd5b5f35801560495762001fff810690815414603c575f5ffd5b62001fff01545f5260205ff35b5f5ffd5b62001fff42064281555f359062001fff015500 | jq -r .contractAddress)
+ADDR_000F3DF6D732807EF1319FB7B8BB8522D0BEAC02=$(cast send --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 0 --create 6103b66103b6556103e86103e85561079e61079e556300000061602760003963000000616000F33373fffffffffffffffffffffffffffffffffffffffe14604d57602036146024575f5ffd5b5f35801560495762001fff810690815414603c575f5ffd5b62001fff01545f5260205ff35b5f5ffd5b62001fff42064281555f359062001fff015500 | jq -r .contractAddress)
 echo $ADDR_000F3DF6D732807EF1319FB7B8BB8522D0BEAC02
 
 echo "[randomStatetest93BC] Creating receiver 0x095e7baea6a6c7c4c2dfeb977efac326af552d87 with code and balance 1000000000000000000..."
-ADDR_095E7BAEA6A6C7C4C2DFEB977EFAC326AF552D87=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 1000000000000000000 --create 6300000011601260003963000000116000F344404340434136437b0703709768f36855 | jq -r .contractAddress)
+ADDR_095E7BAEA6A6C7C4C2DFEB977EFAC326AF552D87=$(cast send --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 1000000000000000000 --create 6300000011601260003963000000116000F344404340434136437b0703709768f36855 | jq -r .contractAddress)
 echo $ADDR_095E7BAEA6A6C7C4C2DFEB977EFAC326AF552D87
 
 echo "[randomStatetest93BC] Creating receiver 0x945304eb96065b2a98b57a48a06ae28d285a71b5 with code and balance 46..."
-ADDR_945304EB96065B2A98B57A48A06AE28D285A71B5=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 46 --create 6300000011601260003963000000116000F36000355415600957005b60203560003555 | jq -r .contractAddress)
+ADDR_945304EB96065B2A98B57A48A06AE28D285A71B5=$(cast send --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value 46 --create 6300000011601260003963000000116000F36000355415600957005b60203560003555 | jq -r .contractAddress)
 echo $ADDR_945304EB96065B2A98B57A48A06AE28D285A71B5
 
-echo "[randomStatetest93BC] Processing transaction number 618 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0x78cf0387F1d6C0B4855025B65D0dDCFA3462f4DB) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
-STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key 558b26d4cfc2704d8962d5962e9b0c58d6ea2de0995108352ac7141b37cc8661 --timeout 20 --value 100000 $ADDR_095E7BAEA6A6C7C4C2DFEB977EFAC326AF552D87 0x42 | jq -r .status)
+echo "[randomStatetest93BC] Processing transaction number 618 from 0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B(remapped to 0xabeE73809aA202a5878B17A81C49A5982649Ac36) to 0x095e7baea6a6c7c4c2dfeb977efac326af552d87"...
+STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key c1a0e91c0d40ed40c6ec3eba22ab20828250727c92c85849db2bc2dcf0262b2c --timeout 20 --value 100000 $ADDR_095E7BAEA6A6C7C4C2DFEB977EFAC326AF552D87 0x42 | jq -r .status)
 if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi
 

@@ -351,7 +351,7 @@ def _create_sh_file(tests):
         test_master_sender_prv_key = test_master_sender.key.hex()
 
         sh_out.write(f"echo \"Funding sender {test_master_sender_addr} for test {test_name} with $TEST_MASTER_SENDER_AMOUNT\"...\n")  # noqa
-        sh_out.write(f"TXHASH=$(cast send --async --nonce $NONCE -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $TEST_MASTER_SENDER_AMOUNT {test_master_sender_addr})\n")  # noqa
+        sh_out.write(f"TXHASH=$(cast send --async --nonce $NONCE --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $TEST_MASTER_SENDER_AMOUNT {test_master_sender_addr})\n")  # noqa
         sh_out.write("NONCE=$((NONCE+1))\n\n")
 
         test_out = open(f"{OUTPUT_FILE}/{test_name}.sh", 'w')
@@ -371,7 +371,7 @@ def _create_sh_file(tests):
 
             test_out.write(f"AMOUNT=$((2*150000*{sender_data.get('count', 0)}*$GAS_PRICE+{sender_data.get('value', 0)}))\n")  # noqa
             test_out.write(f"echo \"[{test_name}] Funding sender {sender_addr}(remapped to {replace_sender_addr}) with $AMOUNT\"...\n")  # noqa
-            test_out.write(f"STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT {replace_sender_addr} | jq -r .status)\n")  # noqa
+            test_out.write(f"STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --value $AMOUNT {replace_sender_addr} | jq -r .status)\n")  # noqa
             test_out.write('if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi\n')  # noqa
             test_out.write('\n')
 
@@ -380,7 +380,7 @@ def _create_sh_file(tests):
                 receiver_addr_bash = "ADDR_" + receiver_addr[2:].upper()
                 balance = receiver_data.get('balance', 0)
                 test_out.write(f"echo \"[{test_name}] Creating receiver {receiver_addr} with code and balance {balance}...\"\n")  # noqa
-                test_out.write(f"{receiver_addr_bash}=$(cast send -j --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value {balance} --create {code} | jq -r .contractAddress)\n")  # noqa
+                test_out.write(f"{receiver_addr_bash}=$(cast send --json --legacy --rpc-url $RPC_URL --private-key $PRV_KEY --timeout 20 --value {balance} --create {code} | jq -r .contractAddress)\n")  # noqa
                 test_out.write(f"echo ${receiver_addr_bash}\n\n")
 
         for tx in test['transactions']:
@@ -415,7 +415,7 @@ def _create_sh_file(tests):
                 else:
                     print(f"***ERROR: Missing 'to' or 'data' in transaction: {tx} for test {test_name}")  # noqa
                     continue
-            test_out.write(f"STATUS=$(cast send -j --legacy --rpc-url $RPC_URL --private-key {_prv_key} --timeout 20 --value {tx.get('value', 0)} {params} | jq -r .status)\n")  # noqa
+            test_out.write(f"STATUS=$(cast send --json --legacy --rpc-url $RPC_URL --private-key {_prv_key} --timeout 20 --value {tx.get('value', 0)} {params} | jq -r .status)\n")  # noqa
             test_out.write('if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi\n')  # noqa
             test_out.write('\n')
             total_transactions += 1
@@ -426,7 +426,7 @@ def _create_sh_file(tests):
     sh_out.write("echo \"Allowing 5s to process txs\"\n")
     sh_out.write("sleep 5\n")
     sh_out.write("echo \"Confirming last txhash: $TXHASH...\"\n")
-    sh_out.write("STATUS=$(cast receipt -j --rpc-url $RPC_URL $TXHASH | jq -r .status)\n")  # noqa
+    sh_out.write("STATUS=$(cast receipt --json --rpc-url $RPC_URL $TXHASH | jq -r .status)\n")  # noqa
     sh_out.write('if [ "$STATUS" == "0x1" ]; then echo "Success"; else echo "FAIL"; fi\n\n')  # noqa
 
     print(f"Total transactions written to sh files: {total_transactions}")

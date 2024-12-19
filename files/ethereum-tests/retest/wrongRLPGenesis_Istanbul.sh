@@ -1,5 +1,5 @@
-# PRV_KEY for master sender 0x84571Cf0f80Ab9258F41cebfDAd64301959a705e
-PRV_KEY=551b5d5a4979a4409f9f92d5a771c8e28e5ea758657774f765e11439ef34994f
+# PRV_KEY for master sender 0xe8DB5D7BB5876d8488C46EcD8Ddd3Fbce42302b5
+PRV_KEY=1b66c46a877736079d1716b042dbf017218ae4767a0caf13f005a46ab267dfd7
 GAS_PRICE=$(cast gas-price --rpc-url $RPC_URL)
 
 echo "Test wrongRLPGenesis_Istanbul (src/BlockchainTestsFiller/InvalidBlocks/bcExpectSection/wrongRLPGenesisCopier.json)"
