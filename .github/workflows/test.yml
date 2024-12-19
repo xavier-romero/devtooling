@@ -70,8 +70,8 @@ jobs:
         - name: Sleep 10 seconds
           run: sleep 10
   
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: Just 1 EOA tx
           run: docker exec devtooling x txtest
@@ -79,62 +79,65 @@ jobs:
         - name: Fund Claim tx manager
           run: docker exec devtooling x cast send --legacy --value 1ether $CLAIMTX
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: Run retests
           run: docker exec devtooling x run-retests
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: Check Boundaries
           run: docker exec devtooling x scripted -f /files/scripted/boundaries.json
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: Check past issues
           run: docker exec devtooling x scripted -f /files/scripted/scripted.json
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: Check tx calls
           run: docker exec devtooling x scripted -f /files/scripted/scripted-calling.json
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: Check identity precompileds
           run: docker exec devtooling x scripted -f /files/scripted/scripted-identity_precompiled.json
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: zkEVM Test Vectors
           run: docker exec devtooling x run-zktv
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: John fuzzed tests
           run: docker exec devtooling x run-fuzzed
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: Bridge to L2
           run: docker exec devtooling x bench --bridge2l2
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: Bridge to L1
           run: docker exec devtooling x bench --bridge2l1
 
-        - name: Check Block Number
-          run: docker exec devtooling x cast bn
+        - name: Network info
+          run: docker exec devtooling x netinfo
 
         - name: Just 1 EOA tx
           run: docker exec devtooling x txtest
+
+        - name: Network info
+          run: docker exec devtooling x netinfo

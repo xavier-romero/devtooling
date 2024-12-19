@@ -7,7 +7,7 @@ RUN cd polygon-cli && make build
 # ETH TOOLS
 FROM golang:1.23 as ethtools
 WORKDIR /tmp
-RUN echo "Bump git 10"
+RUN echo "Bump git 11"
 RUN git clone https://github.com/xavier-romero/eth-bench.git
 RUN cd eth-bench && git submodule init && git submodule update
 
@@ -92,6 +92,7 @@ RUN ln -s /repos/eth-bench/tool_scripted.py /scripts/scripted
 RUN ln -s /repos/eth-bench/tool_txspam.py /scripts/txspam
 RUN ln -s /repos/eth-bench/tool_txtest.py /scripts/txtest
 RUN ln -s /repos/eth-bench/tool_sc_chaos_monkey.py /scripts/sc_chaos
+RUN ln -s /repos/eth-bench/tool_netinfo.py /scripts/netinfo
 
 # set path
 RUN echo 'PATH=$PATH:/scripts' >> /root/.bashrc
