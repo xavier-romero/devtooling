@@ -141,3 +141,6 @@ jobs:
 
         - name: Network info
           run: docker exec devtooling x netinfo
+
+        - name: Wait to verify everything
+          run: docker exec devtooling x wait-verified

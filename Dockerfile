@@ -7,7 +7,7 @@ RUN cd polygon-cli && make build
 # ETH TOOLS
 FROM golang:1.23 as ethtools
 WORKDIR /tmp
-RUN echo "Bump git 11"
+RUN echo "Bump git 12"
 RUN git clone https://github.com/xavier-romero/eth-bench.git
 RUN cd eth-bench && git submodule init && git submodule update
 
@@ -69,6 +69,7 @@ COPY --chmod=755 scripts/run-fuzzed.sh /scripts/run-fuzzed
 COPY --chmod=755 scripts/run-zktv.sh /scripts/run-zktv
 COPY --chmod=755 scripts/wait-rpc.sh /scripts/wait-rpc
 COPY --chmod=755 scripts/run-retests.sh /scripts/run-retests
+COPY --chmod=755 scripts/wait-verified.sh /scripts/wait-verified
 
 # Ansible related content
 COPY files/ansible /ansible
